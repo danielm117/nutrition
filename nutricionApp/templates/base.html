@@ -1,0 +1,51 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="{% static "css/bootstrap/bootstrap.min.css" %}">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="{% static "css/bootstrap/bootstrap-theme.min.css" %}"> 
+    <link rel="stylesheet" href="{% static "css/styles.css" %}">     
+    
+    <title>{% block title %}Nutrición{% endblock %}</title>
+</head>
+
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-18">
+        <nav class="navbar navbar-default" role="navigation">
+          <div class="container-fluid">          
+            <div class="navbar-header pull-right">
+              <a class="navbar-brand navbar-btn" href="/">Nombre Usuario</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            	<ul class="nav navbar-nav pull-right">
+                    <li>
+                        <div class="btn-lg navbar-btn">
+                        <a class="" href="/">
+                        	<span class="glyphicon glyphicon-home"></span>
+                        </a>
+                        </div>
+                    </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+        </div>
+    </div>
+    <div class="row">
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<br>
+</body>
+<script src="{% static "js/bootstrap/jquery.min.js" %}"></script>
+<script src="{% static "js/bootstrap/bootstrap.min.js" %}"></script>
+</html>

@@ -1,27 +1,29 @@
 from django.contrib import admin
-from .models import USUARIO
-from .models import USUARIO_ALIMENTO_PORCION
-from .models import GRAMOSPORPORCION
-from .models import ALIMENTO
-from .models import CANTIDAD_NUTRIENTE_ALIMENTO
-from .models import NUTRIENTE
-from .models import NUTRIENTE_ETIQUETA
-from .models import FUNCION_LINEAL
-from .models import ETIQUETA
-from .models import RECOMENDACIONES
-from .models import REGLA
-from .models import PRECEDENTE_CONSECUENTE
+from .models import Usuario
+from .models import Alimento
+from .models import Nutriente
+from .models import Etiqueta
+from .models import Recomendaciones
+from .models import Regla
+from .models import Gramosporporcion
+from .models import Usuario_Alimento_Porcion
+from .models import Cantidad_Nutriente_Alimento
+from .models import Nutriente_Etiqueta
+from .models import Funcion_Lineal
+from .models import Precendente_Consecuente
 
 # Register your models here.
-admin.site.register(USUARIO)
-admin.site.register(USUARIO_ALIMENTO_PORCION)
-admin.site.register(GRAMOSPORPORCION)
-admin.site.register(ALIMENTO)
-admin.site.register(CANTIDAD_NUTRIENTE_ALIMENTO)
-admin.site.register(NUTRIENTE)
-admin.site.register(NUTRIENTE_ETIQUETA)
-admin.site.register(FUNCION_LINEAL)
-admin.site.register(ETIQUETA)
-admin.site.register(RECOMENDACIONES)
-admin.site.register(REGLA)
-admin.site.register(PRECEDENTE_CONSECUENTE)
+admin.site.register(Usuario)
+admin.site.register(Alimento)
+admin.site.register(Nutriente)
+admin.site.register(Etiqueta)
+admin.site.register(Recomendaciones)
+admin.site.register(Regla)
+admin.site.register(Gramosporporcion)
+admin.site.register(Usuario_Alimento_Porcion)
+admin.site.register(Cantidad_Nutriente_Alimento)
+admin.site.register(Nutriente_Etiqueta)
+admin.site.register(Funcion_Lineal)
+admin.site.register(Precendente_Consecuente)
+
+
