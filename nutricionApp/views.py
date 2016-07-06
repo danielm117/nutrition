@@ -3,7 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.shortcuts import render
 from django.template import loader, Context, RequestContext
-from nutricionApp.models import Alimento, Usuario, Nutriente
+from nutricionApp.models import Alimento, Usuario, Nutriente, Etiqueta
 from django.http import HttpResponse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, render_to_response
@@ -49,5 +49,22 @@ def listar_nutrientes(request):
         diccionario={'nutrientes':nutrientes}      
 
     template = loader.get_template("nutrientes.html")
+    context = RequestContext(request,diccionario)
+    return HttpResponse({template.render(context)})
+def listar_etiquetas(request):
+    try:
+        etiquetas=Etiqueta.objects.all()
+    except:
+        etiquetas=None
+        error="No se pudo obtener el listado de etiquetas"
+        diccionario={'error_message':error}
+
+    if not etiquetas:
+        error="No hay etiquetas Registrados" 
+        diccionario={'error_message':error}       
+    else:
+        diccionario={'etiquetas':etiquetas}      
+
+    template = loader.get_template("etiquetas.html")
     context = RequestContext(request,diccionario)
     return HttpResponse({template.render(context)})

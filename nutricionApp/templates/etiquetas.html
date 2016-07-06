@@ -1,24 +1,60 @@
 {% extends "home.html" %}
 {% block alimentos %}
 	<br/>
-	Lista de Alimentos
+	Lista de Etiquetas
 	<br/>
-	<table class="table table-striped table-hover table-condensed" >
-  	<tr>
-    	<th>Alimentoasdasdasd</th>
-    	<th>Editar</th> 
-    	<th>Borrar</th>
-    </tr>
-    {% for nutriente in nutrientes %}
-      <tr>
-		<td>{{nutriente.nombre}}</td>
-		<td><img style="width: 46px;"src="http://www.conjugaciondeverbos.com/wp-content/uploads/2014/03/VERBO-ELIMINAR.jpg" 
-		 class="img-rounded"></td>
-		<td><img style="width: 40px;"src="http://www.zoanthus.es/imgs/encuesta.png" 
-		 class="img-rounded"></td>
-	   </tr>	    
-    {% endfor %}
+	<div class = "tabla">
+		<table class="table table-striped table-hover table-condensed" >
+		<tr>
+			<th>Etiquetas</th>
+			<th>Conjuntos</th> 
+			<th>Editar</th> 
+			<th>Borrar</th>
+		</tr>
+		{% for etiqueta in etiquetas %}
+		  <tr>
+			<td>{{etiqueta.nombre}}</td>
+			<td><a onclick="mostrar()" style="color: rgb(255, 255, 255); font-style: normal; background-color: #333742; padding: 4px; border-radius: 4px;" >CONJUNTOS</a></td>		
+			<td><img style="width: 40px;"src="http://www.zoanthus.es/imgs/encuesta.png"  class="img-rounded"></td>
+			<td><img style="width: 46px;"src="http://www.conjugaciondeverbos.com/wp-content/uploads/2014/03/VERBO-ELIMINAR.jpg" class="img-rounded"></td>
+		   </tr>	    
+		{% endfor %}		
+		</table>
+	</div>
+	{% for etiqueta in etiquetas %}
+		<div class ="funciones" id='{{etiqueta.nombre}}'>
+		</div>
+	{% endfor %}		
+
  
-</table>
+<script type="text/javascript">
+	function mostrar(){
+		document.getElementById('Muy Bajo').style.display = 'block';
+		document.getElementById('Bajo').style.display = 'none';
+		document.getElementById('Recomendado').style.display = 'none';
+		document.getElementById('Alto').style.display = 'none';
+		document.getElementById('Excesivo').style.display = 'none';
+	}
+</script>
+<style>
+	.funciones{
+		background-image: url(http://www.datacrm.la/datacrm/datacrm/test/upload/images/Untitled.jpg);
+		background-size: 100% 100%;
+		background-repeat: no-repeat;
+		height: 300px;
+		width: 100%;
+		color: white;
+		float: left;
+		width: 50%;
+		display:none;
+
+	}
+	.tabla{
+		float: left;
+		width: 50%;
+	
+	}
+</style>
 {{error_message}}
 {% endblock %}
+
