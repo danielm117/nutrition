@@ -1,5 +1,5 @@
 {% extends "home.html" %}
-{% block alimentos %}
+{% block pestana %}
 	<br/>
 	Lista de Nutrientes
 	<br/>
@@ -11,7 +11,7 @@
     </tr>
     {% for nutriente in nutrientes %}
       <tr>
-		<td>{{nutriente.nombre}}</td>
+		<td><a href="etiquetas/{{nutriente.nombre}}/" >{{nutriente.nombre}}</a></td>
 		<td><img style="width: 40px;"src="http://www.zoanthus.es/imgs/encuesta.png" class="img-rounded"></td>
 		<td><img style="width: 46px;"src="http://www.conjugaciondeverbos.com/wp-content/uploads/2014/03/VERBO-ELIMINAR.jpg" class="img-rounded"></td>
 	   </tr>	    

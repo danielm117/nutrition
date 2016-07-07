@@ -68,9 +68,7 @@ class Cantidad_Nutriente_Alimento(models.Model):
     nutriente = models.ForeignKey(Alimento)
     alimento = models.ForeignKey(Nutriente)
     cantidad_gr = models.DecimalField(max_digits=15, decimal_places=3)
-    
-    def __unicode__(self):
-        return unicode(self.nutriente)
+
         
 
         
@@ -79,7 +77,7 @@ class Nutriente_Etiqueta(models.Model):
     etiqueta = models.ForeignKey(Etiqueta)
     
     def __unicode__(self):
-        return unicode(self.nutriente)
+        return u'%s %s' % (self.nutriente, self.etiqueta)
         
 class Funcion_Lineal(models.Model):
     m = models.DecimalField(max_digits=8, decimal_places=4)

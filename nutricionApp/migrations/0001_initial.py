@@ -15,8 +15,8 @@ class Migration(migrations.Migration):
             name='Alimento',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('nombre', models.CharField(max_length=50)),
-                ('codigo_fao', models.CharField(max_length=50)),
+                ('nombre', models.CharField(unique=True, max_length=50)),
+                ('codigo_fao', models.CharField(unique=True, max_length=50)),
                 ('tags', models.CharField(max_length=80)),
             ],
         ),
@@ -31,7 +31,7 @@ class Migration(migrations.Migration):
             name='Etiqueta',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('nombre', models.CharField(max_length=50)),
+                ('nombre', models.CharField(unique=True, max_length=50)),
             ],
         ),
         migrations.CreateModel(
@@ -57,7 +57,7 @@ class Migration(migrations.Migration):
             name='Nutriente',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('nombre', models.CharField(max_length=50)),
+                ('nombre', models.CharField(unique=True, max_length=50)),
             ],
         ),
         migrations.CreateModel(
@@ -87,7 +87,7 @@ class Migration(migrations.Migration):
             name='Regla',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('nombre', models.CharField(max_length=50)),
+                ('nombre', models.CharField(unique=True, max_length=50)),
             ],
         ),
         migrations.CreateModel(
@@ -96,7 +96,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('fecha_nacimiento', models.DateTimeField()),
                 ('nombres', models.CharField(max_length=254)),
-                ('correo', models.EmailField(max_length=254)),
+                ('correo', models.EmailField(unique=True, max_length=254)),
                 ('peso', models.DecimalField(max_digits=5, decimal_places=2)),
                 ('estatura_cm', models.IntegerField()),
                 ('ejercicio', models.IntegerField()),
