@@ -52,11 +52,10 @@ def listar_nutrientes(request):
     context = RequestContext(request,diccionario)
     return HttpResponse({template.render(context)})
 def listar_etiquetas(request,n):
-    nutriente1=Nutriente.objects.filter(nombre=n)
-    test=Nutriente_Etiqueta.objects.filter(nutriente=nutriente1)
+    
     try:
-		
-        etiquetas=Etiqueta.objects.all()
+        nutriente1=Nutriente.objects.filter(nombre=n)
+        etiquetas=Nutriente_Etiqueta.objects.filter(nutriente=nutriente1)
     except:
         etiquetas=None
         error="No se pudo obtener el listado de etiquetas"
@@ -66,7 +65,7 @@ def listar_etiquetas(request,n):
         error="No hay etiquetas Registrados" 
         diccionario={'error_message':error}       
     else:
-        diccionario={'etiquetas':etiquetas,'url':test}      
+        diccionario={'etiquetas':etiquetas}      
 
     template = loader.get_template("etiquetas.html")
     context = RequestContext(request,diccionario)

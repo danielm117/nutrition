@@ -13,29 +13,38 @@
 		</tr>
 		{% for etiqueta in etiquetas %}
 		  <tr>
-			<td>{{etiqueta.nombre}}</td>
-			<td><a onclick="mostrar()" style="color: rgb(255, 255, 255); font-style: normal; background-color: #333742; padding: 4px; border-radius: 4px;" >CONJUNTOS</a></td>		
+			<td>{{etiqueta.etiqueta}}</td>
+			<td><a onclick="mostrar('{{etiqueta.etiqueta}}')" style="color: rgb(255, 255, 255); font-style: normal; background-color: #333742; padding: 4px; border-radius: 4px;" >CONJUNTOS</a></td>		
 			<td><img style="width: 40px;"src="http://www.zoanthus.es/imgs/encuesta.png"  class="img-rounded"></td>
 			<td><img style="width: 46px;"src="http://www.conjugaciondeverbos.com/wp-content/uploads/2014/03/VERBO-ELIMINAR.jpg" class="img-rounded"></td>
 		   </tr>	    
-		{% endfor %}		
+		{% endfor %}			
 		</table>
 	</div>
 	{% for etiqueta in etiquetas %}
-		<div class ="funciones" id='{{etiqueta.nombre}}'>
+		<div class ="funciones" id='{{etiqueta.etiqueta}}'>
 		</div>
 	{% endfor %}		
 
- 
-<script type="text/javascript">
-	function mostrar(){
-		document.getElementById('Muy Bajo').style.display = 'block';
-		document.getElementById('Bajo').style.display = 'none';
-		document.getElementById('Recomendado').style.display = 'none';
-		document.getElementById('Alto').style.display = 'none';
-		document.getElementById('Excesivo').style.display = 'none';
+ <script type="text/javascript">
+	function mostrar(opcion){
+		{% for e in etiquetas %}
+			if( "{{e.etiqueta}}" == opcion ){
+				console.log(opcion);
+				document.getElementById(opcion).style.display = 'block';
+				{% for e in etiquetas %}
+					if( "{{e.etiqueta}}" != opcion ){
+						console.log("ocultar {{e.etiqueta}}");
+						document.getElementById("{{e.etiqueta}}").style.display = 'none';
+					}
+				{% endfor %}		
+
+			}
+		{% endfor %}		
+
 	}
 </script>
+
 <style>
 	.funciones{
 		background-image: url(http://www.datacrm.la/datacrm/datacrm/test/upload/images/Untitled.jpg);
