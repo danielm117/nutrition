@@ -23,36 +23,39 @@
 	</div>
 	{% for etiqueta in etiquetas %}
 		<div class ="funciones" id='{{etiqueta.etiqueta}}'>
+			<div class ="conjuntos">
+				<spam> {{etiqueta.etiqueta}}</spam>
+				<br>
+				<spam> {{etiqueta.etiqueta}}</spam>
+				<br>
+	{% for t in test %}
+		{% if t.conjunto == a %}
+				<spam> {{t.conjunto}}</spam>
+				<br>
+		{% endif %}		
+	{% endfor %}		
+
+			</div>
 		</div>
 	{% endfor %}		
 
  <script type="text/javascript">
 	function mostrar(opcion){
-		{% for e in etiquetas %}
-			if( "{{e.etiqueta}}" == opcion ){
-				console.log(opcion);
-				document.getElementById(opcion).style.display = 'block';
-				{% for e in etiquetas %}
-					if( "{{e.etiqueta}}" != opcion ){
-						console.log("ocultar {{e.etiqueta}}");
-						document.getElementById("{{e.etiqueta}}").style.display = 'none';
-					}
-				{% endfor %}		
-
-			}
-		{% endfor %}		
-
+		{% for e in etiquetas %}		
+				document.getElementById("{{e.etiqueta}}").style.display = 'none';
+		{% endfor %}
+		document.getElementById(opcion).style.display = 'block';		
 	}
 </script>
 
 <style>
 	.funciones{
 		background-image: url(http://www.datacrm.la/datacrm/datacrm/test/upload/images/Untitled.jpg);
-		background-size: 100% 100%;
+		background-size: 100% 60%;
 		background-repeat: no-repeat;
 		height: 300px;
 		width: 100%;
-		color: white;
+		color: black;
 		float: left;
 		width: 50%;
 		display:none;
@@ -62,6 +65,10 @@
 		float: left;
 		width: 50%;
 	
+	}
+	.conjuntos{
+		margin: 8.5% 25% 31% 29%;
+		line-height: 35px;
 	}
 </style>
 {{error_message}}
