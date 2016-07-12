@@ -52,23 +52,23 @@ def listar_nutrientes(request):
     context = RequestContext(request,diccionario)
     return HttpResponse({template.render(context)})
 def listar_etiquetas(request,n):
-    nutriente1=Nutriente.objects.filter(nombre=n)
-    etiquetas=Nutriente_Etiqueta.objects.filter(nutriente=nutriente1)
-    #~ test=etiquetas
-    test2 ='Colesterol Recomendado' 
-    test=Funcion_Lineal.objects.filter (conjunto= etiquetas)
+    
     try:
-        test1="asas"
+        nutriente1=Nutriente.objects.filter(nombre=n)
+        etiquetas_nutriente=Nutriente_Etiqueta.objects.filter(nutriente=nutriente1)
+        funciones_lineales={}
+        for e in etiquetas_nutriente:		
+		    funciones_lineales[e.etiqueta.nombre]=Funcion_Lineal.objects.filter (conjunto=e)
     except:
-        etiquetas=None
+        etiquetas_nutriente=None
         error="No se pudo obtener el listado de etiquetas"
         diccionario={'error_message':error}
 
-    if not etiquetas:
+    if not etiquetas_nutriente:
         error="No hay etiquetas Registrados" 
         diccionario={'error_message':error}       
     else:
-        diccionario={'etiquetas':etiquetas, 'test':test, 'a':test2}      
+        diccionario={'etiquetas':etiquetas_nutriente, 'test':funciones_lineales}      
 
     template = loader.get_template("etiquetas.html")
     context = RequestContext(request,diccionario)
