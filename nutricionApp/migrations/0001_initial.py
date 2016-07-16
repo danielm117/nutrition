@@ -42,6 +42,7 @@ class Migration(migrations.Migration):
                 ('b', models.DecimalField(max_digits=8, decimal_places=4)),
                 ('x1', models.DecimalField(max_digits=8, decimal_places=4)),
                 ('x2', models.DecimalField(max_digits=8, decimal_places=4)),
+                ('unidad_medida', models.CharField(default=b'g', max_length=1)),
             ],
         ),
         migrations.CreateModel(
@@ -58,6 +59,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('nombre', models.CharField(unique=True, max_length=50)),
+                ('kcalxgramo', models.IntegerField()),
             ],
         ),
         migrations.CreateModel(

@@ -24,7 +24,7 @@ class Alimento(models.Model):
         
 class Nutriente(models.Model):
     nombre = models.CharField(max_length=50, null=False,unique=True)
-    
+    kcalxgramo =  models.IntegerField(null=False, default = 0)
     def __unicode__(self):
         return unicode(self.nombre)
         
@@ -69,8 +69,7 @@ class Cantidad_Nutriente_Alimento(models.Model):
     alimento = models.ForeignKey(Nutriente)
     cantidad_gr = models.DecimalField(max_digits=15, decimal_places=3)
 
-        
-
+       
         
 class Nutriente_Etiqueta(models.Model):
     nutriente = models.ForeignKey(Nutriente)
@@ -85,7 +84,7 @@ class Funcion_Lineal(models.Model):
     conjunto = models.ForeignKey(Nutriente_Etiqueta)
     x1 = models.DecimalField(max_digits=8, decimal_places=4)
     x2 = models.DecimalField(max_digits=8, decimal_places=4)
-    
+    unidad_medida = models.CharField(max_length=1, null=False,  default= "g")
     def __unicode__(self):
         return unicode(self.conjunto)
 

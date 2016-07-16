@@ -7,4 +7,5 @@ urlpatterns = [
     url(r'^alimentos$', 'nutricionApp.views.listar_alimentos'),
     url(r'^nutrientes$', 'nutricionApp.views.listar_nutrientes'),
     url(r'^etiquetas/([A-Za-z]{1,20})/$', 'nutricionApp.views.listar_etiquetas'),
+    url(r'^guardar_funciones/$', 'nutricionApp.views.guardar_funciones'),
 ]

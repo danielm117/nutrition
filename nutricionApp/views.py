@@ -73,3 +73,21 @@ def listar_etiquetas(request,n):
     template = loader.get_template("etiquetas.html")
     context = RequestContext(request,diccionario)
     return HttpResponse({template.render(context)})
+    
+def guardar_funciones(request):
+    
+    error = False
+    funcionesrequest = request.GET
+    funcionesId=[]
+    funciones=[]
+    #~ test2 = Funcion_Lineal.objects.all()
+    for f in funcionesrequest.keys():
+        if f.split('_',1)[0] not in funcionesId:
+		    funcionesId.append(f.split('_',1)[0])
+		    funciones.append(Funcion_Lineal.objects.filter(id=f.split('_',1)[0]))
+
+    
+    diccionario={'test':funciones}      
+    template = loader.get_template("test.html")
+    context = RequestContext(request,diccionario)
+    return HttpResponse({template.render(context)})
