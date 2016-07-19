@@ -51,8 +51,7 @@ def listar_nutrientes(request):
     template = loader.get_template("nutrientes.html")
     context = RequestContext(request,diccionario)
     return HttpResponse({template.render(context)})
-def listar_etiquetas(request,n):
-    
+def listar_etiquetasNutriente(request,n):
     try:
         nutriente1=Nutriente.objects.filter(nombre=n)
         etiquetas_nutriente=Nutriente_Etiqueta.objects.filter(nutriente=nutriente1)
@@ -70,14 +69,29 @@ def listar_etiquetas(request,n):
     else:
         diccionario={'etiquetas':etiquetas_nutriente, 'test':funciones_lineales}      
 
+    template = loader.get_template("etiquetasNutriente.html")
+    context = RequestContext(request,diccionario)
+    return HttpResponse({template.render(context)})
+def listar_etiquetas(request):
+    try:
+        etiquetas=Etiqueta.objects.all()
+    except:
+        etiquetas=None
+        error="No se pudo obtener el listado de etiquetas"
+        diccionario={'error_message':error}
+
+    if not etiquetas:
+        error="No hay etiquetas Registrados" 
+        diccionario={'error_message':error}       
+    else:
+        diccionario={'etiquetas':etiquetas}      
+
     template = loader.get_template("etiquetas.html")
     context = RequestContext(request,diccionario)
     return HttpResponse({template.render(context)})
     
 def guardar_funciones(request):
-    
     error = False
-    test2=[]
     funcionesrequest = request.GET
     funcionesId=[]
     funciones=[]
@@ -98,4 +112,43 @@ def guardar_funciones(request):
             funcion.b=funcionesrequest[f]
     for f in funciones:
         f.save()    
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    
+def guardar_nutrientes(request):
+    error = False
+    test2=[]
+    nutrientesrequest = request.GET
+    nutrientesId=[]
+    nutrientes=[]
+    nutriente=None
+    for n in nutrientesrequest.keys():
+        if n.split('_',1)[0] not in nutrientesId:
+            nutrientesId.append(n.split('_',1)[0])
+            nutriente=Nutriente.objects.filter(nombre=n.split('_',1)[0])[0]
+            nutrientes.append(nutriente)
+        nutrientedict=nutrientesrequest[n]
+        if n.split('_',1)[1]=='nombre':
+            nutriente.nombre=nutrientesrequest[n]
+        elif n.split('_',1)[1]=='kcalxgramo':
+            nutriente.kcalxgramo=nutrientesrequest[n]
+    for n in nutrientes:
+        n.save()    
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+def guardar_etiquetas(request):
+    error = False
+    test2=[]
+    etiquetasrequest = request.GET
+    etiquetasId=[]
+    etiquetas=[]
+    etiqueta=None
+    for e in etiquetasrequest.keys():
+        if e.split('_',1)[0] not in etiquetasId:
+            etiquetasId.append(e.split('_',1)[0])
+            etiqueta=Etiqueta.objects.filter(nombre=e.split('_',1)[0])[0]
+            etiquetas.append(etiqueta)
+        etiquetadict=etiquetasrequest[e]
+        if e.split('_',1)[1]=='nombre':
+            etiqueta.nombre=etiquetasrequest[e]
+    for e in etiquetas:
+        e.save()    
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
