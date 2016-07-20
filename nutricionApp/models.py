@@ -34,17 +34,11 @@ class Etiqueta(models.Model):
     def __unicode__(self):
         return unicode(self.nombre)
 
-class Recomendaciones(models.Model):
+class Recomendacion(models.Model):
     descripcion = models.CharField(max_length=256, null=False)
     
     def __unicode__(self):
         return unicode(self.descripcion)
-
-class Regla(models.Model):
-    nombre = models.CharField(max_length=50, null=False,unique=True)
-    
-    def __unicode__(self):
-        return unicode(self.nombre)
 
 class Gramosporporcion(models.Model):
     nombre_porcion = models.CharField(max_length=254, null=False)
@@ -87,13 +81,20 @@ class Funcion_Lineal(models.Model):
     unidad_medida = models.CharField(max_length=1, null=False,  default= "g")
     def __unicode__(self):
         return unicode(self.conjunto)
-
         
-class Precendente_Consecuente(models.Model):
-    regla_id = models.ForeignKey(Regla)
-    nutriente_etiqueta = models.ForeignKey(Nutriente_Etiqueta)
-    recomendacion = models.ForeignKey(Recomendaciones)
-    tipo = models.CharField(max_length=1, null=False)
+class Regla(models.Model):
+    nombre = models.CharField(max_length=50, null=False,unique=True)
+    recomendacion = models.ForeignKey(Recomendacion)
+    consecuente = models.ForeignKey(Nutriente_Etiqueta)
+
+    def __unicode__(self):
+        return unicode(self.nombre)
+        
+class Precendente_Regla(models.Model):
+    regla = models.ForeignKey(Regla)
+    precendente = models.ForeignKey(Nutriente_Etiqueta)
     
     def __unicode__(self):
         return unicode(self.regla_id)
+
+
