@@ -13,7 +13,6 @@
 		</tr>
 		{% for etiqueta in etiquetas %}
 		<form action="/guardar_funciones/" method="get">
-			
 		  <tr>
 			<td>{{etiqueta.etiqueta}}</td>
 			<td>
@@ -32,6 +31,7 @@
 						{% for v in value %} 
 							<div id ='Funcion_{{etiqueta.etiqueta}}_{{v.id}}'><input type="text" name="{{v.id}}_m" value={{v.m|floatformat:2}} size=4>x + (<input type="text" name="{{v.id}}_b" value={{v.b|floatformat:2}} size=4>) ; <input type="text" name="{{v.id}}_x1" value={{v.x1|floatformat:2}} size=4> &#60 x &#8804  <input type="text" name="{{v.id}}_x2" value={{v.x2|floatformat:2}} size=4></div> <br>
 						{% endfor %}
+							<div id ='Funcion_{{etiqueta.etiqueta}}_0'><input type="text" name="{{etiqueta.etiqueta}}_m" size=4>x + (<input type="text" name="{{etiqueta.etiqueta}}_b" size=4>) ; <input type="text" name="{{etiqueta.etiqueta}}_x1"  size=4> &#60 x &#8804  <input type="text" name="{{etiqueta.etiqueta}}_x2" size=4></div> <br>
 					{% endif %}
 				{% endfor %}	
 				</div>
@@ -47,9 +47,17 @@
 			</td>
 			<td><img style="width: 46px;"src="http://www.conjugaciondeverbos.com/wp-content/uploads/2014/03/VERBO-ELIMINAR.jpg" class="img-rounded"></td>
 		   </tr>
-		   
 			</form>	    
-		{% endfor %}			
+		{% endfor %}
+			
+		<tr>
+			<th>Etiquetas</th>
+			<th>Funciones</th> 
+			<th>Editar/Guardar</th> 
+			<th>Borrar</th>
+		</tr>
+			
+			
 		</table>
 	</div>
 	{% for etiqueta in etiquetas %}

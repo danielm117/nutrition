@@ -96,22 +96,49 @@ def guardar_funciones(request):
     funcionesId=[]
     funciones=[]
     funcion=None
+    nueva= Funcion_Lineal()
+    nutiente_nuevo=None
+    etiqueta_nuevo=None
     for f in funcionesrequest.keys():
-        if f.split('_',1)[0] not in funcionesId:
-            funcionesId.append(f.split('_',1)[0])
-            funcion=Funcion_Lineal.objects.filter(id=f.split('_',1)[0])[0]
-            funciones.append(funcion)
-        funciondict=funcionesrequest[f]
-        if f.split('_',1)[1]=='x1':
-            funcion.x1=funcionesrequest[f]
-        elif f.split('_',1)[1]=='x2':
-            funcion.x2=funcionesrequest[f]
-        elif f.split('_',1)[1]=='m':
-            funcion.m=funcionesrequest[f]
-        elif f.split('_',1)[1]=='b':
-            funcion.b=funcionesrequest[f]
+        try:
+            aux = int(f.split('_',1)[0])
+            if f.split('_',1)[0] not in funcionesId:
+                funcionesId.append(f.split('_',1)[0])
+                funcion=Funcion_Lineal.objects.filter(id=f.split('_',1)[0])[0]
+                funciones.append(funcion)
+                funciondict=funcionesrequest[f]
+            if f.split('_',1)[1]=='x1':
+                funcion.x1=funcionesrequest[f]
+            elif f.split('_',1)[1]=='x2':
+                funcion.x2=funcionesrequest[f]
+            elif f.split('_',1)[1]=='m':
+                funcion.m=funcionesrequest[f]
+            elif f.split('_',1)[1]=='b':
+                funcion.b=funcionesrequest[f]
+        except ValueError:
+            etiqueta_nuevo = f.split('_',1)[0]
+            if f.split('_',1)[1]=='x1':
+                nueva.x1=funcionesrequest[f]
+            elif f.split('_',1)[1]=='x2':
+                nueva.x2=funcionesrequest[f]
+            elif f.split('_',1)[1]=='m':
+                nueva.m=funcionesrequest[f]
+            elif f.split('_',1)[1]=='b':
+                nueva.b=funcionesrequest[f]
+
     for f in funciones:
-        f.save()    
+        f.save()
+    nutriente_nuevo = (request.META.get('HTTP_REFERER').split('/etiquetas',1)[1]).replace("/", "")
+    n = Nutriente.objects.filter(nombre=nutriente_nuevo)[0].pk;
+    e = Etiqueta.objects.filter(nombre=etiqueta_nuevo)[0].pk;
+    nueva.conjunto = Nutriente_Etiqueta.objects.filter(etiqueta=e,nutriente=n)[0]
+    nueva.save()
+    
+    #~ diccionario={'test':n,'test1':etiqueta_nuevo,'test2':nutriente_nuevo}      
+    #~ template = loader.get_template("test.html")
+    #~ context = RequestContext(request,diccionario)
+    #~ return HttpResponse({template.render(context)})    
+    #~ 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     
 def guardar_nutrientes(request):
