@@ -62,12 +62,14 @@ def listar_etiquetasNutriente(request,n):
         etiquetas_nutriente=None
         error="No se pudo obtener el listado de etiquetas"
         diccionario={'error_message':error}
-
+    nueva_etiquetas=Etiqueta.objects.all()
+    
     if not etiquetas_nutriente:
         error="No hay etiquetas Registrados" 
         diccionario={'error_message':error}       
     else:
-        diccionario={'etiquetas':etiquetas_nutriente, 'test':funciones_lineales}      
+	    
+        diccionario={'etiquetas':etiquetas_nutriente, 'funciones_lineales':funciones_lineales, 'nueva_etiquetas':nueva_etiquetas}      
 
     template = loader.get_template("etiquetasNutriente.html")
     context = RequestContext(request,diccionario)
@@ -132,7 +134,9 @@ def guardar_funciones(request):
     n = Nutriente.objects.filter(nombre=nutriente_nuevo)[0].pk;
     e = Etiqueta.objects.filter(nombre=etiqueta_nuevo)[0].pk;
     nueva.conjunto = Nutriente_Etiqueta.objects.filter(etiqueta=e,nutriente=n)[0]
-    nueva.save()
+    if (not((nueva.x1=="") or (nueva.x2=="") or (nueva.m=="") or (nueva.b==""))):
+        nueva.save()
+        
     
     #~ diccionario={'test':n,'test1':etiqueta_nuevo,'test2':nutriente_nuevo}      
     #~ template = loader.get_template("test.html")
