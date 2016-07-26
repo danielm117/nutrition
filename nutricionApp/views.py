@@ -56,13 +56,21 @@ def listar_etiquetasNutriente(request,n):
         nutriente1=Nutriente.objects.filter(nombre=n)
         etiquetas_nutriente=Nutriente_Etiqueta.objects.filter(nutriente=nutriente1)
         funciones_lineales={}
-        for e in etiquetas_nutriente:		
+        for e in etiquetas_nutriente:
 		    funciones_lineales[e.etiqueta.nombre]=Funcion_Lineal.objects.filter (conjunto=e)
     except:
         etiquetas_nutriente=None
         error="No se pudo obtener el listado de etiquetas"
         diccionario={'error_message':error}
-    nueva_etiquetas=Etiqueta.objects.all()
+    todas_etiquetas=Etiqueta.objects.all()
+    etiquetas_usadas = []
+    for e in etiquetas_nutriente:
+        if e.etiqueta.nombre not in etiquetas_usadas:
+            etiquetas_usadas.append(e.etiqueta)
+    nueva_etiquetas = []
+    for e in todas_etiquetas:
+        if e not in etiquetas_usadas:
+            nueva_etiquetas.append(e)
     
     if not etiquetas_nutriente:
         error="No hay etiquetas Registrados" 
