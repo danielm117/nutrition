@@ -11,4 +11,6 @@ urlpatterns = [
     url(r'^guardar_funciones/$', 'nutricionApp.views.guardar_funciones'),
     url(r'^guardar_nutrientes/$', 'nutricionApp.views.guardar_nutrientes'),
     url(r'^guardar_etiquetas/$', 'nutricionApp.views.guardar_etiquetas'),
+    url(r'^guardar_nuevo_etiqueta_nutriente/$', 'nutricionApp.views.guardar_nuevo_etiqueta_nutriente'),
+
 ]

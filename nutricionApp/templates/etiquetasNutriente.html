@@ -15,53 +15,59 @@
 		</tr>
 		{% for etiqueta in etiquetas %}
 		<form action="/guardar_funciones/" method="get">
-		  <tr>
-			<td>{{etiqueta.etiqueta}}</td>
-			<td>
-				<div class ="funciones_vista" id='{{etiqueta.etiqueta}}'>
-				{% for key, value in funciones_lineales.items %} 
-					{% if key == etiqueta.etiqueta.nombre %}
-						{% for v in value %} 
-							{{v.m|floatformat:2}}x + ({{v.b|floatformat:2}}) ; {{v.x1|floatformat:2}} &#60 x &#8804  {{v.x2|floatformat:2}} <br>
-						{% endfor %}
-					{% endif %}
-				{% endfor %}	
-				</div>
-				<div class ="funciones_editar" id='{{etiqueta.etiqueta}}Input'>
-				{% for key, value in funciones_lineales.items %} 
-					{% if key == etiqueta.etiqueta.nombre %}
-						{% for v in value %} 
-							<div id ='Funcion_{{etiqueta.etiqueta}}_{{v.id}}'><input type="text" name="{{v.id}}_m" value={{v.m|floatformat:2}} size=4 required/>x + (<input type="text" name="{{v.id}}_b" value={{v.b|floatformat:2}} size=4 required/>) ; <input type="text" name="{{v.id}}_x1" value={{v.x1|floatformat:2}} size=4 required/> &#60 x &#8804  <input type="text" name="{{v.id}}_x2" value={{v.x2|floatformat:2}} size=4 required/></div> <br>
-						{% endfor %}
-							<div id ='Funcion_{{etiqueta.etiqueta}}_0'><input type="text" name="{{etiqueta.etiqueta}}_m" size=4>x + (<input type="text" name="{{etiqueta.etiqueta}}_b" size=4>) ; <input type="text" name="{{etiqueta.etiqueta}}_x1"  size=4> &#60 x &#8804  <input type="text" name="{{etiqueta.etiqueta}}_x2" size=4></div> <br>
-					{% endif %}
-				{% endfor %}	
-				</div>
-			</td>		
-			<td>
-				<div id="editar_{{etiqueta.etiqueta}}">
-					<a onclick="editar('{{etiqueta.etiqueta}}')"><img style="width: 48px;" src="{% static "image/editar.png" %}"  class="img-rounded"></a>
-				</div>
-				<div id="guardar_{{etiqueta.etiqueta}}" style="display: none;">
-				<input style="background-image: url({% static "image/guardar.jpeg" %}); background-repeat: no-repeat; background-size: 100% 100%; color: white; height: 48px; width: 48px; border: hidden;" type="submit" value=" ">
-				</div>
-			</td>
-			<td><img style="width: 48px;" src="{% static "image/trash.png" %}" class="img-rounded"></td>
-		   </tr>
-			</form>	    
+			<tr>
+				<td>{{etiqueta.etiqueta}}</td>
+				<td>
+					<div class ="funciones_vista" id='{{etiqueta.etiqueta}}'>
+					{% for key, value in funciones_lineales.items %} 
+						{% if key == etiqueta.etiqueta.nombre %}
+							{% for v in value %} 
+								{{v.m|floatformat:2}}x + ({{v.b|floatformat:2}}) ; {{v.x1|floatformat:2}} &#60 x &#8804  {{v.x2|floatformat:2}} <br>
+							{% endfor %}
+						{% endif %}
+					{% endfor %}	
+					</div>
+					<div class ="funciones_editar" id='{{etiqueta.etiqueta}}Input'>
+					{% for key, value in funciones_lineales.items %} 
+						{% if key == etiqueta.etiqueta.nombre %}
+							{% for v in value %} 
+								<div id ='Funcion_{{etiqueta.etiqueta}}_{{v.id}}'><input type="text" name="{{v.id}}_m" value={{v.m|floatformat:2}} size=4 required/>x + (<input type="text" name="{{v.id}}_b" value={{v.b|floatformat:2}} size=4 required/>) ; <input type="text" name="{{v.id}}_x1" value={{v.x1|floatformat:2}} size=4 required/> &#60 x &#8804  <input type="text" name="{{v.id}}_x2" value={{v.x2|floatformat:2}} size=4 required/></div> <br>
+							{% endfor %}
+								<div id ='Funcion_{{etiqueta.etiqueta}}_0'><input type="text" name="{{etiqueta.etiqueta}}_m" size=4>x + (<input type="text" name="{{etiqueta.etiqueta}}_b" size=4>) ; <input type="text" name="{{etiqueta.etiqueta}}_x1"  size=4> &#60 x &#8804  <input type="text" name="{{etiqueta.etiqueta}}_x2" size=4></div> <br>
+						{% endif %}
+					{% endfor %}	
+					</div>
+				</td>		
+				<td>
+					<div id="editar_{{etiqueta.etiqueta}}">
+						<a onclick="editar('{{etiqueta.etiqueta}}')"><img style="width: 48px;" src="{% static "image/editar.png" %}"  class="img-rounded"></a>
+					</div>
+					<div id="guardar_{{etiqueta.etiqueta}}" style="display: none;">
+					<input style="background-image: url({% static "image/guardar.jpeg" %}); background-repeat: no-repeat; background-size: 100% 100%; color: white; height: 48px; width: 48px; border: hidden;" type="submit" value=" ">
+					</div>
+				</td>
+				<td><img style="width: 48px;" src="{% static "image/trash.png" %}" class="img-rounded"></td>
+			</tr>
+		</form>
 		{% endfor %}
 			
 		<tr>
-			
-			<td><select>
+			<form action="/guardar_nuevo_etiqueta_nutriente/" method="get">
+			<td><select name="etiqueta">
 				{% for etiqueta in nueva_etiquetas %}
 						<option>{{etiqueta.nombre}} </option>
 				{% endfor %}
 				</select> 
 			</td>
 			<td> </td>
+			<td>
+				<div id="guardar_nuevo" style="display: hide;">
+					<input style="background-image: url({% static "image/guardar.jpeg" %}); background-repeat: no-repeat; background-size: 100% 100%; color: white; height: 48px; width: 48px; border: hidden;" type="submit" value=" ">
+				</div>
+			</td>
 			<td> </td>
-			<td> </td>
+			</form>	    
+
 		</tr>
 			
 			

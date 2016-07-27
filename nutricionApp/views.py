@@ -191,3 +191,17 @@ def guardar_etiquetas(request):
     for e in etiquetas:
         e.save()    
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+def guardar_nuevo_etiqueta_nutriente(request):
+
+    etiquetarequest = request.GET
+    etiqueta_nueva = etiquetarequest.get('etiqueta')
+    nutriente_nuevo = (request.META.get('HTTP_REFERER').split('/etiquetas',1)[1]).replace("/", "")
+    
+    n = Nutriente.objects.filter(nombre=nutriente_nuevo)[0];
+    e = Etiqueta.objects.filter(nombre=etiqueta_nueva)[0];
+    nueva = Nutriente_Etiqueta(etiqueta=e,nutriente=n)
+    nueva.save()
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+    
