@@ -1,4 +1,6 @@
 {% extends "home.html" %}
+{% load staticfiles %}
+
 {% block pestana %}
 	<br/>
 	Lista de Nutrientes
@@ -35,6 +37,24 @@
 	   </tr>
 	</form>	    	    
     {% endfor %}
+    
+	<form action="/guardar_nuevo_nutriente/" method="get">    
+    <tr>
+		<td>
+			<div style = "display:hide;" ><input type="text" name="nombre_nutriente"  size=15></div>
+		</td>
+		<td>
+			<div style = "display:hide;" ><input type="text" name="nombre_kcalxgramo"  size=5></div>
+		</td>
+		<td><div id="guardar_nuevo" style="display: hide;">
+				<input style="background-image: url({% static "image/guardar.jpeg" %}); background-repeat: no-repeat; background-size: 100% 100%; color: white; height: 48px; width: 48px; border: hidden;" type="submit" value=" ">
+			</div>
+			
+		</td>
+		<td></td>
+    </tr>
+   	</form>	    	    
+
 
 	</table>
  <script type="text/javascript">
