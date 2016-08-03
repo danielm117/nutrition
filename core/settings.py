@@ -88,8 +88,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
         'NAME': 'nutricionApp',
-        'USER': 'root',
-        'PASSWORD': '2593826',
+        'USER': 'tesis',
+        'PASSWORD': 'tesistesis',
         'HOST': '127.0.0.1',
         'PORT': '',
     }

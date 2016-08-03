@@ -1,33 +1,91 @@
 {% extends "home.html" %}
+{% load staticfiles %}
+
 {% block pestana %}
 	<br/>
-	Lista de Alimentos
+	Lista de alimentos
 	<br/>
-
 	<table class="table table-striped table-hover table-condensed" >
   	<tr>
-    	<th>Alimento</th>
-    	<th>Codigo FAO</th> 
-    	<th>Etiquetas</th>
+    	<th>Alimentos</th>
+    	<th>Codigo Fao</th>
+    	<th>Tags</th>
+    	<th>Editar</th> 
+    	<th>Borrar</th>
     </tr>
-    
-    {% for alimento in alimentos %}
-	    
-      <tr>
-	        <td>{{alimento.nombre}}</td>
-	        <td>{{alimento.codigo_fao}}</td>
-	        <td>{{alimento.tags}}</td> 
-	   </tr>	    
-    {% endfor %}
-     <tr>
-	        <td>hcgvhb</td>
-	        <td>jhj</td>
-	        <td>dhfgjhj</td> 
-	  </tr>	
-    
-    
-   	
+	{% for alimento in alimentos %}
+    <form action="/guardar_alimentos/" method="get">
 
-</table>
+      <tr>
+		<td>
+			<div class ='{{alimento.nombre}}'><a href="etiquetas/{{alimento.nombre}}/" >{{alimento.nombre}}</a></div>
+			<div class ='{{alimento.nombre}}Input' style = "display:none;"><input type="text" name="{{alimento.nombre}}_nombre" value={{alimento.nombre}} size=15></div>
+		</td>
+		<td>
+			<div class ='{{alimento.nombre}}'><a href="etiquetas/{{alimento.nombre}}/" >{{alimento.codigo_fao}}</a></div>
+			<div class ='{{alimento.nombre}}Input' style = "display:none;" ><input type="text" name="{{alimento.nombre}}_codigo_fao" value={{alimento.codigo_fao}} size=15></div>
+		</td>
+		<td>
+			<div class ='{{alimento.nombre}}'><a href="etiquetas/{{alimento.nombre}}/" >{{alimento.tags}}</a></div>
+			<div class ='{{alimento.nombre}}Input' style = "display:none;" ><input type="text" name="{{alimento.nombre}}_tags" value={{alimento.tags}} size=15></div>
+		</td>
+		<td>
+			<div id="editar_{{alimento.nombre}}">
+				<a onclick="editar('{{alimento.nombre}}')"><img style="width: 40px;"src="http://www.zoanthus.es/imgs/encuesta.png"  class="img-rounded"></a>
+			</div>
+			<div id="guardar_{{alimento.nombre}}" style="display: none;">
+				<input style="background-image: url({% static "image/guardar.jpeg" %}); background-repeat: no-repeat; background-size: 100% 100%; color: white; height: 48px; width: 48px; border: hidden;" type="submit" value=" ">
+			</div>
+		</td>
+		<td><a href="http://127.0.0.1:8000/eliminar_alimento/?pk={{alimento.pk}}"><img style="width: 48px;" src="{% static "image/trash.png" %}" class="img-rounded"></a></td>
+	   </tr>
+	</form>	    	    
+    {% endfor %}
+    
+	<form action="/guardar_nuevo_alimento/" method="get">    
+    <tr>
+		<td>
+			<div style = "display:hide;" ><input type="text" name="nombre_alimento"  size=15 required/></div>
+		</td>
+		<td>
+			<div style = "display:hide;" ><input type="text" name="nombre_codigo_fao" value=0 size=5 required/></div>
+		</td>
+		<td>
+			<div style = "display:hide;" ><input type="text" name="nombre_tags" value=0 size=5 required/></div>
+		</td>
+		<td><div id="guardar_nuevo" style="display: hide;">
+				<input style="background-image: url({% static "image/guardar.jpeg" %}); background-repeat: no-repeat; background-size: 100% 100%; color: white; height: 48px; width: 48px; border: hidden;" type="submit" value=" ">
+			</div>
+			
+		</td>
+		<td></td>
+    </tr>
+   	</form>	    	    
+
+
+	</table>
+ <script type="text/javascript">
+	function editar(opcion){
+		{% for alimento in alimentos %}		
+				document.getElementsByClassName("{{alimento.nombre}}"+"Input")[0].style.display = 'none';
+				document.getElementsByClassName("{{alimento.nombre}}")[0].style.display = 'block';
+				document.getElementsByClassName("{{alimento.nombre}}"+"Input")[1].style.display = 'none';
+				document.getElementsByClassName("{{alimento.nombre}}")[1].style.display = 'block';
+				document.getElementsByClassName("{{alimento.nombre}}"+"Input")[2].style.display = 'none';
+				document.getElementsByClassName("{{alimento.nombre}}")[2].style.display = 'block';
+				document.getElementById("editar_"+"{{alimento.nombre}}").style.display = 'block';		
+				document.getElementById("guardar_"+"{{alimento.nombre}}").style.display = 'none';		
+		{% endfor %}		
+		document.getElementsByClassName(opcion)[0].style.display = 'none';
+		document.getElementsByClassName(opcion+"Input")[0].style.display = 'block';		
+		document.getElementsByClassName(opcion)[1].style.display = 'none';
+		document.getElementsByClassName(opcion+"Input")[1].style.display = 'block';		
+		document.getElementsByClassName(opcion)[2].style.display = 'none';
+		document.getElementsByClassName(opcion+"Input")[2].style.display = 'block';		
+		document.getElementById("guardar_"+opcion).style.display = 'block';		
+		document.getElementById("editar_"+opcion).style.display = 'none';		
+	}
+</script>
+
 {{error_message}}
 {% endblock %}

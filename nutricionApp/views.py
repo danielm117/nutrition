@@ -1,14 +1,16 @@
+# -*- coding: utf-8 -*-
+#!/usr/local/bin/python
 from django.shortcuts import render
-
+import chardet
 # Create your views here.
 from django.shortcuts import render
 from django.template import loader, Context, RequestContext
-from nutricionApp.models import Alimento, Usuario, Nutriente, Etiqueta, Nutriente_Etiqueta, Funcion_Lineal
+from nutricionApp.models import Alimento, Paciente, Nutriente, Etiqueta, Nutriente_Etiqueta, Funcion_Lineal
 from django.http import HttpResponse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, render_to_response
 
-import os
+import os,sys
 
 
 # Create your views here.
@@ -52,29 +54,28 @@ def listar_nutrientes(request):
     context = RequestContext(request,diccionario)
     return HttpResponse({template.render(context)})
 def listar_etiquetasNutriente(request,n):
+    todas_etiquetas=Etiqueta.objects.all()
+    etiquetas_usadas = []
+    nueva_etiquetas = []
     try:
         nutriente1=Nutriente.objects.filter(nombre=n)
         etiquetas_nutriente=Nutriente_Etiqueta.objects.filter(nutriente=nutriente1)
         funciones_lineales={}
         for e in etiquetas_nutriente:
-		    funciones_lineales[e.etiqueta.nombre]=Funcion_Lineal.objects.filter (conjunto=e)
+            funciones_lineales[e.etiqueta.nombre]=Funcion_Lineal.objects.filter (conjunto=e)
+        for e in etiquetas_nutriente:
+            if e.etiqueta.nombre not in etiquetas_usadas:
+                etiquetas_usadas.append(e.etiqueta)
     except:
         etiquetas_nutriente=None
         error="No se pudo obtener el listado de etiquetas"
         diccionario={'error_message':error}
-    todas_etiquetas=Etiqueta.objects.all()
-    etiquetas_usadas = []
-    for e in etiquetas_nutriente:
-        if e.etiqueta.nombre not in etiquetas_usadas:
-            etiquetas_usadas.append(e.etiqueta)
-    nueva_etiquetas = []
     for e in todas_etiquetas:
         if e not in etiquetas_usadas:
             nueva_etiquetas.append(e)
-    
     if not etiquetas_nutriente:
         error="No hay etiquetas Registrados" 
-        diccionario={'error_message':error}       
+        diccionario={'error_message':error,'nueva_etiquetas':nueva_etiquetas}       
     else:
 	    
         diccionario={'etiquetas':etiquetas_nutriente, 'funciones_lineales':funciones_lineales, 'nueva_etiquetas':nueva_etiquetas}      
@@ -202,6 +203,7 @@ def guardar_nuevo_etiqueta_nutriente(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 def guardar_nuevo_nutriente(request):
     nutrientesrequest = request.GET
+    kcalxgramo=0
     nueva = Nutriente(nombre=nutrientesrequest.get('nombre_nutriente'),kcalxgramo=nutrientesrequest.get('nombre_kcalxgramo'))
     nueva.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -210,5 +212,63 @@ def guardar_nueva_etiqueta(request):
     nueva = Etiqueta(nombre=nutrientesrequest.get('nombre_etiqueta'))
     nueva.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+def eliminar_nutriente_etiqueta(request):
+    etiquetarequest = request.GET
+    pk = etiquetarequest.get('pk');
+    nutriente_etiqueta = Nutriente_Etiqueta.objects.filter(pk=pk)[0]
+    nutriente_etiqueta.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+def eliminar_etiqueta(request):
+    etiquetarequest = request.GET
+    pk = etiquetarequest.get('pk');
+    etiqueta = Etiqueta.objects.filter(pk=pk)[0]
+    etiqueta.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+def eliminar_nutriente(request):
+    etiquetarequest = request.GET
+    pk = etiquetarequest.get('pk');
+    nutriente = Nutriente.objects.filter(pk=pk)[0]
+    nutriente.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+def eliminar_funcion(request):
+    etiquetarequest = request.GET
+    pk = etiquetarequest.get('pk');
+    funcion = Funcion_Lineal.objects.filter(pk=pk)[0]
+    funcion.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+def get_data(request):
+    filename = os.path.dirname(__file__)+"/database/database.sqlite"
+    outputFileName = os.path.dirname(__file__)+"/database/SQLiteData.sql"
+    output = open(outputFileName, "w")
+    mysql2sqlite = os.path.dirname(__file__)+"/scripts/mysql2sqlitedata.sh"
+    command1 = 'mysql -h localhost -u tesis -ptesistesis -N information_schema -e "select table_name from tables where table_schema = \'nutricionApp\' and table_name like \'nutricionApp_%\' and table_name not like \'nutricionApp_services\' and table_name not like \'nutricionApp_paciente\' and table_name not like \'nutricionApp_medico\' and table_name not like \'nutricionApp_medico_paciente\'" > tables.txt'
+    #print 'comando: '+command1
+    os.system(command1)
+    tables = ''
+    with open('tables.txt', "r") as tablesfile:
+        for line in tablesfile:
+            tables = tables+line.rstrip('\n')+' '
+        tablesfile.close()
+    command2 = 'sh %s -h localhost -u tesis -ptesistesis nutricionApp %s | sed "%s" > %s' % (
+        mysql2sqlite, tables, "s/\\\\'//g", filename)
+    os.system(command2)
+
+    with open(filename, encoding = "ISO-8859-1") as fileDB:
+        
+        data=  ""    
+        for line in fileDB:
+            line = line.replace("\"","")
+            line = line.replace('"','')
+            data=data+line
+    output.close()
+    fileDB.close()
+    version='1'
+    print (data)
+    #max_version = Version.objects.all().aggregate(Max('version'))['version__max']
+    #version = Version.objects.get(version = max_version)
+    diccionario={"version":version,"data": data }
+    template = loader.get_template("database.html")
+    context = RequestContext(request,diccionario)
+    return HttpResponse({template.render(context)})
 
     
