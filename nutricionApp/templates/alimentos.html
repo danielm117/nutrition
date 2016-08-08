@@ -19,19 +19,19 @@
       <tr>
 		<td>
 			<div class ='{{alimento.nombre}}'><a href="etiquetas/{{alimento.nombre}}/" >{{alimento.nombre}}</a></div>
-			<div class ='{{alimento.nombre}}Input' style = "display:none;"><input type="text" name="{{alimento.nombre}}_nombre" value={{alimento.nombre}} size=15></div>
+			<div class ='{{alimento.nombre}}Input' style = "display:none;"><input type="text" name="{{alimento.nombre}}_nombre" value="{{alimento.nombre}}" size=15></div>
 		</td>
 		<td>
 			<div class ='{{alimento.nombre}}'><a href="etiquetas/{{alimento.nombre}}/" >{{alimento.codigo_fao}}</a></div>
-			<div class ='{{alimento.nombre}}Input' style = "display:none;" ><input type="text" name="{{alimento.nombre}}_codigo_fao" value={{alimento.codigo_fao}} size=15></div>
+			<div class ='{{alimento.nombre}}Input' style = "display:none;" ><input type="text" name="{{alimento.nombre}}_codigo_fao" value="{{alimento.codigo_fao}}" size=15></div>
 		</td>
 		<td>
 			<div class ='{{alimento.nombre}}'><a href="etiquetas/{{alimento.nombre}}/" >{{alimento.tags}}</a></div>
-			<div class ='{{alimento.nombre}}Input' style = "display:none;" ><input type="text" name="{{alimento.nombre}}_tags" value={{alimento.tags}} size=15></div>
+			<div class ='{{alimento.nombre}}Input' style = "display:none;" ><input type="text" name="{{alimento.nombre}}_tags" value="{{alimento.tags}}" size=20></div>
 		</td>
 		<td>
 			<div id="editar_{{alimento.nombre}}">
-				<a onclick="editar('{{alimento.nombre}}')"><img style="width: 40px;"src="http://www.zoanthus.es/imgs/encuesta.png"  class="img-rounded"></a>
+				<a onclick="editar('{{alimento.nombre}}')"><img style="width: 40px;" src="{% static "image/editar.png" %}"  class="img-rounded"></a>
 			</div>
 			<div id="guardar_{{alimento.nombre}}" style="display: none;">
 				<input style="background-image: url({% static "image/guardar.jpeg" %}); background-repeat: no-repeat; background-size: 100% 100%; color: white; height: 48px; width: 48px; border: hidden;" type="submit" value=" ">
@@ -48,10 +48,10 @@
 			<div style = "display:hide;" ><input type="text" name="nombre_alimento"  size=15 required/></div>
 		</td>
 		<td>
-			<div style = "display:hide;" ><input type="text" name="nombre_codigo_fao" value=0 size=5 required/></div>
+			<div style = "display:hide;" ><input type="text" name="nombre_codigo_fao" size=20 required/></div>
 		</td>
 		<td>
-			<div style = "display:hide;" ><input type="text" name="nombre_tags" value=0 size=5 required/></div>
+			<div style = "display:hide;" ><input type="text" name="nombre_tags"  size=20 required/></div>
 		</td>
 		<td><div id="guardar_nuevo" style="display: hide;">
 				<input style="background-image: url({% static "image/guardar.jpeg" %}); background-repeat: no-repeat; background-size: 100% 100%; color: white; height: 48px; width: 48px; border: hidden;" type="submit" value=" ">

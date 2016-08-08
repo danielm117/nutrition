@@ -192,6 +192,32 @@ def guardar_etiquetas(request):
     for e in etiquetas:
         e.save()    
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+def guardar_alimentos(request):
+    error = False
+    test2=[]
+    alimentosrequest = request.GET
+    alimentosId=[]
+    alimentos=[]
+    alimento=None
+    for a in alimentosrequest.keys():
+        if a.split('_',1)[0] not in alimentosId:
+            alimentosId.append(a.split('_',1)[0])
+            alimento=Alimento.objects.filter(nombre=a.split('_',1)[0])[0]
+            alimentos.append(alimento)
+        alimentodict=alimentosrequest[a]
+        if a.split('_',1)[1]=='nombre':
+            alimento.nombre=alimentosrequest[a]
+        elif a.split('_',1)[1]=='codigo_fao':
+            alimento.codigo_fao=alimentosrequest[a]
+        elif a.split('_',1)[1]=='tags':
+            alimento.tags=alimentosrequest[a]
+    for a in alimentos:
+        a.save()    
+    # diccionario={'test':alimentos,'test1':alimentosrequest,'test2':alimentosId}      
+    # template = loader.get_template("test.html")
+    # context = RequestContext(request,diccionario)
+    # return HttpResponse({template.render(context)})    
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 def guardar_nuevo_etiqueta_nutriente(request):
     etiquetarequest = request.GET
     etiqueta_nueva = etiquetarequest.get('etiqueta')
@@ -205,6 +231,11 @@ def guardar_nuevo_nutriente(request):
     nutrientesrequest = request.GET
     kcalxgramo=0
     nueva = Nutriente(nombre=nutrientesrequest.get('nombre_nutriente'),kcalxgramo=nutrientesrequest.get('nombre_kcalxgramo'))
+    nueva.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+def guardar_nuevo_alimento(request):
+    alimentosrequest = request.GET
+    nueva = Alimento(nombre=alimentosrequest.get('nombre_alimento'),codigo_fao=alimentosrequest.get('nombre_codigo_fao'),tags=alimentosrequest.get('nombre_tags'))
     nueva.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 def guardar_nueva_etiqueta(request):
@@ -228,6 +259,12 @@ def eliminar_nutriente(request):
     etiquetarequest = request.GET
     pk = etiquetarequest.get('pk');
     nutriente = Nutriente.objects.filter(pk=pk)[0]
+    nutriente.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+def eliminar_alimento(request):
+    etiquetarequest = request.GET
+    pk = etiquetarequest.get('pk');
+    nutriente = Alimento.objects.filter(pk=pk)[0]
     nutriente.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 def eliminar_funcion(request):
