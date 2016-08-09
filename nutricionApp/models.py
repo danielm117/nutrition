@@ -72,9 +72,11 @@ class Paciente_Alimento_Porcion(models.Model):
         return self.tamano_porcion
 
 class Cantidad_Nutriente_Alimento(models.Model):
-    nutriente = models.ForeignKey(Alimento)
-    alimento = models.ForeignKey(Nutriente)
+    nutriente = models.ForeignKey(Nutriente)
+    alimento = models.ForeignKey(Alimento)
     cantidad_gr = models.DecimalField(max_digits=15, decimal_places=3)
+    def __str__(self):
+        return u'%s %s' % (self.alimento, self.nutriente)
 
        
         

@@ -1,0 +1,94 @@
+{% extends "home.html" %}
+{% load staticfiles %}
+
+{% block pestana %}
+	<br/>
+	Lista de porciones
+	<br/>
+	<table class="table table-striped table-hover table-condensed" >
+  	<tr>
+    	<th>Nombre Porcion</th>
+    	<th>Alimento</th>
+    	<th>Gramos por Porcion</th>
+    	<th>Editar</th> 
+    	<th>Borrar</th>
+    </tr>
+	{% for porcion in porciones %}
+    <form action="/guardar_porciones/" method="get">
+      <tr>
+		<td>
+			<div class ='{{porcion.nombre_porcion}}'><a href="etiquetas/{{porcion.nombre_porcion}}/" >{{porcion.nombre_porcion}}</a></div>
+			<div class ='{{porcion.nombre_porcion}}Input' style = "display:none;"><input type="text" name="{{porcion.nombre_porcion}}_nombre" value="{{porcion.nombre_porcion}}" size=15></div>
+		</td>
+		<td>
+			<div class ='{{porcion.nombre_porcion}}'><a href="etiquetas/{{porcion.nombre_porcion}}/" >{{porcion.alimento}}</a></div>
+			<div class ='{{porcion.nombre_porcion}}Input' style = "display:none;" ><input type="text" name="{{porcion.nombre_porcion}}_alimento" value="{{porcion.alimento}}" size=15></div>
+		</td>
+		<td>
+			<div class ='{{porcion.nombre_porcion}}'><a href="etiquetas/{{porcion.nombre_porcion}}/" >{{porcion.valor_gramos}}</a></div>
+			<div class ='{{porcion.nombre_porcion}}Input' style = "display:none;" ><input type="text" name="{{porcion.nombre_porcion}}_valor_gramos" value="{{porcion.valor_gramos}}" size=20></div>
+		</td>
+		<td>
+			<div id="editar_{{porcion.nombre_porcion}}">
+				<a onclick="editar('{{porcion.nombre_porcion}}')"><img style="width: 40px;" src="{% static "image/editar.png" %}"  class="img-rounded"></a>
+			</div>
+			<div id="guardar_{{porcion.nombre_porcion}}" style="display: none;">
+				<input style="background-image: url({% static "image/guardar.jpeg" %}); background-repeat: no-repeat; background-size: 100% 100%; color: white; height: 48px; width: 48px; border: hidden;" type="submit" value=" ">
+			</div>
+		</td>
+		<td><a href="http://127.0.0.1:8000/eliminar_porcion/?pk={{porcion.pk}}"><img style="width: 48px;" src="{% static "image/trash.png" %}" class="img-rounded"></a></td>
+	   </tr>
+	</form>	    	    
+    {% endfor %}
+    
+	<form action="/guardar_nueva_porcion/" method="get">    
+    <tr>
+		<td>
+			<div style = "display:hide;" ><input type="text" name="nombre_porcion"  size=15 required/></div>
+		</td>
+		<td>
+			<select name="nombre_alimento">
+				{% for alimento in alimentos %}
+						<option>{{alimento.nombre}} </option>
+				{% endfor %}
+				</select> 
+		</td>
+		<td>
+			<div style = "display:hide;" ><input type="text" name="nombre_valor_gramos"  size=5 required/></div>
+		</td>
+		<td><div id="guardar_nuevo" style="display: hide;">
+				<input style="background-image: url({% static "image/guardar.jpeg" %}); background-repeat: no-repeat; background-size: 100% 100%; color: white; height: 48px; width: 48px; border: hidden;" type="submit" value=" ">
+			</div>
+			
+		</td>
+		<td></td>
+    </tr>
+   	</form>	    	    
+
+
+	</table>
+ <script type="text/javascript">
+	function editar(opcion){
+		{% for porcion in porciones %}		
+				document.getElementsByClassName("{{porcion.nombre_porcion}}"+"Input")[0].style.display = 'none';
+				document.getElementsByClassName("{{porcion.nombre_porcion}}")[0].style.display = 'block';
+				document.getElementsByClassName("{{porcion.nombre_porcion}}"+"Input")[1].style.display = 'none';
+				document.getElementsByClassName("{{porcion.nombre_porcion}}")[1].style.display = 'block';
+				document.getElementsByClassName("{{porcion.nombre_porcion}}"+"Input")[2].style.display = 'none';
+				document.getElementsByClassName("{{porcion.nombre_porcion}}")[2].style.display = 'block';
+				document.getElementById("editar_"+"{{porcion.nombre_porcion}}").style.display = 'block';		
+				document.getElementById("guardar_"+"{{porcion.nombre_porcion}}").style.display = 'none';		
+		{% endfor %}		
+		document.getElementsByClassName(opcion)[0].style.display = 'none';
+		document.getElementsByClassName(opcion+"Input")[0].style.display = 'block';		
+		document.getElementsByClassName(opcion)[1].style.display = 'none';
+		document.getElementsByClassName(opcion+"Input")[1].style.display = 'block';		
+		document.getElementsByClassName(opcion)[2].style.display = 'none';
+		document.getElementsByClassName(opcion+"Input")[2].style.display = 'block';		
+		document.getElementById("guardar_"+opcion).style.display = 'block';		
+		document.getElementById("editar_"+opcion).style.display = 'none';		
+	}
+</script>
+
+{{error_message}}
+{% endblock %}

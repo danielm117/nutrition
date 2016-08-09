@@ -5,7 +5,7 @@ import chardet
 # Create your views here.
 from django.shortcuts import render
 from django.template import loader, Context, RequestContext
-from nutricionApp.models import Alimento, Paciente, Nutriente, Etiqueta, Nutriente_Etiqueta, Funcion_Lineal
+from nutricionApp.models import Alimento, Paciente, Nutriente, Etiqueta, Nutriente_Etiqueta, Funcion_Lineal,Gramosporporcion,Cantidad_Nutriente_Alimento
 from django.http import HttpResponse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, render_to_response
@@ -36,6 +36,24 @@ def listar_alimentos(request):
     template = loader.get_template("alimentos.html")
     context = RequestContext(request,diccionario)
     return HttpResponse({template.render(context)})
+def listar_porciones(request):
+    try:
+        porciones=Gramosporporcion.objects.all()
+        alimentos=Alimento.objects.all()
+    except:
+        porciones=None
+        error="No se pudo obtener el listado de porciones"
+        diccionario={'error_message':error}
+
+    if not porciones:
+        error="No hay porciones Registrados" 
+        diccionario={'error_message':error}       
+    else:
+        diccionario={'porciones':porciones,'alimentos':alimentos}      
+
+    template = loader.get_template("porciones.html")
+    context = RequestContext(request,diccionario)
+    return HttpResponse({template.render(context)})
 def listar_nutrientes(request):
     try:
         nutrientes=Nutriente.objects.all()
@@ -51,6 +69,30 @@ def listar_nutrientes(request):
         diccionario={'nutrientes':nutrientes}      
 
     template = loader.get_template("nutrientes.html")
+    context = RequestContext(request,diccionario)
+    return HttpResponse({template.render(context)})
+def listar_nutrientesAlimento(request,n):
+    nutrientes_usados = []
+    nuevo_nutrientes = []
+    try:
+        nutrienteAlimento=Cantidad_Nutriente_Alimento.objects.all()
+        todos_nutrientes=Nutriente.objects.all()
+    except:
+        nutrienteAlimento=None
+        error="No se pudo obtener el listado de nutrientes"
+        diccionario={'error_message':error}
+
+    for n in nutrienteAlimento:
+        nutrientes_usados.append(n.nutriente)
+    for n in todos_nutrientes:
+        if n not in nutrientes_usados:
+            nuevo_nutrientes.append(n)
+    if not nutrienteAlimento:
+        error="No hay nutrientes Registrados" 
+        diccionario={'error_message':error}       
+    else:
+        diccionario={'nutrienteAlimento':nutrienteAlimento,'nutrientes_nuevo':nuevo_nutrientes}      
+    template = loader.get_template("nutrientesAlimento.html")
     context = RequestContext(request,diccionario)
     return HttpResponse({template.render(context)})
 def listar_etiquetasNutriente(request,n):
@@ -70,6 +112,7 @@ def listar_etiquetasNutriente(request,n):
         etiquetas_nutriente=None
         error="No se pudo obtener el listado de etiquetas"
         diccionario={'error_message':error}
+    
     for e in todas_etiquetas:
         if e not in etiquetas_usadas:
             nueva_etiquetas.append(e)
@@ -213,10 +256,6 @@ def guardar_alimentos(request):
             alimento.tags=alimentosrequest[a]
     for a in alimentos:
         a.save()    
-    # diccionario={'test':alimentos,'test1':alimentosrequest,'test2':alimentosId}      
-    # template = loader.get_template("test.html")
-    # context = RequestContext(request,diccionario)
-    # return HttpResponse({template.render(context)})    
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 def guardar_nuevo_etiqueta_nutriente(request):
     etiquetarequest = request.GET
@@ -225,6 +264,13 @@ def guardar_nuevo_etiqueta_nutriente(request):
     n = Nutriente.objects.filter(nombre=nutriente_nuevo)[0];
     e = Etiqueta.objects.filter(nombre=etiqueta_nueva)[0];
     nueva = Nutriente_Etiqueta(etiqueta=e,nutriente=n)
+    nueva.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+def guardar_nueva_porcion(request):
+    porcionrequest = request.GET
+    alimento_nueva = porcionrequest.get('nombre_alimento')
+    a = Alimento.objects.filter(nombre=alimento_nueva)[0];
+    nueva = Gramosporporcion(nombre_porcion=porcionrequest.get('nombre_porcion'),alimento=a,valor_gramos =porcionrequest.get('nombre_valor_gramos'))
     nueva.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 def guardar_nuevo_nutriente(request):
@@ -259,6 +305,12 @@ def eliminar_nutriente(request):
     etiquetarequest = request.GET
     pk = etiquetarequest.get('pk');
     nutriente = Nutriente.objects.filter(pk=pk)[0]
+    nutriente.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+def eliminar_porcion(request):
+    etiquetarequest = request.GET
+    pk = etiquetarequest.get('pk');
+    nutriente = Gramosporporcion.objects.filter(pk=pk)[0]
     nutriente.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 def eliminar_alimento(request):

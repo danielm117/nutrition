@@ -1,0 +1,83 @@
+{% extends "home.html" %}
+{% load staticfiles %}
+
+{% block pestana %}
+	<br/>
+	Lista de Nutrientes
+	<br/>
+	<table class="table table-striped table-hover table-condensed" >
+  	<tr>
+    	<th>Nutrientes</th>
+    	<th>Cantidad en Gramos</th>
+    	<th>Editar</th> 
+    	<th>Borrar</th>
+    </tr>
+	{% for nutriente in nutrienteAlimento %}
+    <form action="/guardar_nutrientes/" method="get">
+
+      <tr>
+		<td>
+			<div class ='{{nutriente.nutriente}}'><a href="etiquetas/{{nutriente.nutriente}}/" >{{nutriente.nutriente}}</a></div>
+			<div class ='{{nutriente.nutriente}}Input' style = "display:none;"><input type="text" name="{{nutriente.nutriente}}_nutriente" value={{nutriente.nutriente}} size=15></div>
+		</td>
+		<td>
+			<div class ='{{nutriente.nutriente}}'><a href="etiquetas/{{nutriente.nutriente}}/" >{{nutriente.cantidad_gr}}</a></div>
+			<div class ='{{nutriente.nutriente}}Input' style = "display:none;" ><input type="text" name="{{nutriente.nutriente}}_cantidad_gr" value={{nutriente.cantidad_gr}} size=15></div>
+		</td>
+		<td>
+			<div id="editar_{{nutriente.nutriente}}">
+				<a onclick="editar('{{nutriente.nutriente}}')"><img style="width: 40px;"src="http://www.zoanthus.es/imgs/encuesta.png"  class="img-rounded"></a>
+			</div>
+			<div id="guardar_{{nutriente.nutriente}}" style="display: none;">
+				<input style="background-image: url({% static "image/guardar.jpeg" %}); background-repeat: no-repeat; background-size: 100% 100%; color: white; height: 48px; width: 48px; border: hidden;" type="submit" value=" ">
+			</div>
+		</td>
+		<td><a href="http://127.0.0.1:8000/eliminar_nutriente/?pk={{nutriente.pk}}"><img style="width: 48px;" src="{% static "image/trash.png" %}" class="img-rounded"></a></td>
+	   </tr>
+	</form>	    	    
+    {% endfor %}
+    
+	<form action="/guardar_nuevo_nutriente/" method="get">    
+    <tr>
+		<td>
+			<select name="nombre_nutriente">
+				{% for nutriente in nutrientes_nuevo %}
+						<option>{{nutriente.nombre}} </option>
+				{% endfor %}
+			</select> 
+		</td>
+		<td>
+			<div style = "display:hide;" ><input type="text" name="nombre_cantidad_gr" value=0 size=5 required/></div>
+		</td>
+		<td><div id="guardar_nuevo" style="display: hide;">
+				<input style="background-image: url({% static "image/guardar.jpeg" %}); background-repeat: no-repeat; background-size: 100% 100%; color: white; height: 48px; width: 48px; border: hidden;" type="submit" value=" ">
+			</div>
+			
+		</td>
+		<td></td>
+    </tr>
+   	</form>	    	    
+
+
+	</table>
+ <script type="text/javascript">
+	function editar(opcion){
+		{% for nutriente in nutrientes %}		
+				document.getElementsByClassName("{{nutriente.nutriente}}"+"Input")[0].style.display = 'none';
+				document.getElementsByClassName("{{nutriente.nutriente}}")[0].style.display = 'block';
+				document.getElementsByClassName("{{nutriente.nutriente}}"+"Input")[1].style.display = 'none';
+				document.getElementsByClassName("{{nutriente.nutriente}}")[1].style.display = 'block';
+				document.getElementById("editar_"+"{{nutriente.nutriente}}").style.display = 'block';		
+				document.getElementById("guardar_"+"{{nutriente.nutriente}}").style.display = 'none';		
+		{% endfor %}		
+		document.getElementsByClassName(opcion)[0].style.display = 'none';
+		document.getElementsByClassName(opcion+"Input")[0].style.display = 'block';		
+		document.getElementsByClassName(opcion)[1].style.display = 'none';
+		document.getElementsByClassName(opcion+"Input")[1].style.display = 'block';		
+		document.getElementById("guardar_"+opcion).style.display = 'block';		
+		document.getElementById("editar_"+opcion).style.display = 'none';		
+	}
+</script>
+
+{{error_message}}
+{% endblock %}
