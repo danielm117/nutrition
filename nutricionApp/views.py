@@ -188,15 +188,7 @@ def guardar_funciones(request):
     nueva.conjunto = Nutriente_Etiqueta.objects.filter(etiqueta=e,nutriente=n)[0]
     if (not((nueva.x1=="") or (nueva.x2=="") or (nueva.m=="") or (nueva.b==""))):
         nueva.save()
-        
-    
-    #~ diccionario={'test':n,'test1':etiqueta_nuevo,'test2':nutriente_nuevo}      
-    #~ template = loader.get_template("test.html")
-    #~ context = RequestContext(request,diccionario)
-    #~ return HttpResponse({template.render(context)})    
-    #~ 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-    
 def guardar_nutrientes(request):
     error = False
     test2=[]
@@ -216,6 +208,18 @@ def guardar_nutrientes(request):
             nutriente.kcalxgramo=nutrientesrequest[n]
     for n in nutrientes:
         n.save()    
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+def guardar_nutrientesAlimento(request):
+    nutrienterequest = request.GET
+    for n in nutrienterequest.keys():
+        nutriente_nuevo = n.split('_',1)[0]
+        gramos = nutrienterequest[n]
+    alimento_nuevo = (request.META.get('HTTP_REFERER').split('/alimento',1)[1]).replace("/", "")
+    a = Alimento.objects.filter(pk=alimento_nuevo)[0];
+    n = Nutriente.objects.filter(nombre=nutriente_nuevo)[0];
+    nueva = Cantidad_Nutriente_Alimento.objects.filter(nutriente=n,alimento=a)[0]
+    nueva.cantidad_gr = gramos
+    nueva.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 def guardar_etiquetas(request):
     error = False
@@ -266,6 +270,15 @@ def guardar_nuevo_etiqueta_nutriente(request):
     nueva = Nutriente_Etiqueta(etiqueta=e,nutriente=n)
     nueva.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+def guardar_nuevo_nutrientesAlimento(request):
+    nutrienterequest = request.GET
+    nutriente_nueva = nutrienterequest.get('nombre_nutriente')
+    alimento_nuevo = (request.META.get('HTTP_REFERER').split('/alimento',1)[1]).replace("/", "")
+    a = Alimento.objects.filter(pk=alimento_nuevo)[0];
+    n = Nutriente.objects.filter(nombre=nutriente_nueva)[0];
+    nueva = Cantidad_Nutriente_Alimento(nutriente=n,alimento=a,cantidad_gr =nutrienterequest.get('nombre_cantidad_gr'))
+    nueva.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 def guardar_nueva_porcion(request):
     porcionrequest = request.GET
     alimento_nueva = porcionrequest.get('nombre_alimento')
@@ -293,6 +306,12 @@ def eliminar_nutriente_etiqueta(request):
     etiquetarequest = request.GET
     pk = etiquetarequest.get('pk');
     nutriente_etiqueta = Nutriente_Etiqueta.objects.filter(pk=pk)[0]
+    nutriente_etiqueta.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+def eliminar_nutrientesAlimento(request):
+    etiquetarequest = request.GET
+    pk = etiquetarequest.get('pk');
+    nutriente_etiqueta = Cantidad_Nutriente_Alimento.objects.filter(pk=pk)[0]
     nutriente_etiqueta.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 def eliminar_etiqueta(request):

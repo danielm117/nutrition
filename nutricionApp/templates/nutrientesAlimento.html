@@ -13,12 +13,11 @@
     	<th>Borrar</th>
     </tr>
 	{% for nutriente in nutrienteAlimento %}
-    <form action="/guardar_nutrientes/" method="get">
+    <form action="/guardar_nutrientesAlimento/" method="get">
 
       <tr>
 		<td>
-			<div class ='{{nutriente.nutriente}}'><a href="etiquetas/{{nutriente.nutriente}}/" >{{nutriente.nutriente}}</a></div>
-			<div class ='{{nutriente.nutriente}}Input' style = "display:none;"><input type="text" name="{{nutriente.nutriente}}_nutriente" value={{nutriente.nutriente}} size=15></div>
+			<div><a href="etiquetas/{{nutriente.nutriente}}/" >{{nutriente.nutriente}}</a></div>
 		</td>
 		<td>
 			<div class ='{{nutriente.nutriente}}'><a href="etiquetas/{{nutriente.nutriente}}/" >{{nutriente.cantidad_gr}}</a></div>
@@ -32,12 +31,12 @@
 				<input style="background-image: url({% static "image/guardar.jpeg" %}); background-repeat: no-repeat; background-size: 100% 100%; color: white; height: 48px; width: 48px; border: hidden;" type="submit" value=" ">
 			</div>
 		</td>
-		<td><a href="http://127.0.0.1:8000/eliminar_nutriente/?pk={{nutriente.pk}}"><img style="width: 48px;" src="{% static "image/trash.png" %}" class="img-rounded"></a></td>
+		<td><a href="http://127.0.0.1:8000/eliminar_nutrientesAlimento/?pk={{nutriente.pk}}"><img style="width: 48px;" src="{% static "image/trash.png" %}" class="img-rounded"></a></td>
 	   </tr>
 	</form>	    	    
     {% endfor %}
     
-	<form action="/guardar_nuevo_nutriente/" method="get">    
+	<form action="/guardar_nuevo_nutrientesAlimento/" method="get">    
     <tr>
 		<td>
 			<select name="nombre_nutriente">
@@ -47,7 +46,7 @@
 			</select> 
 		</td>
 		<td>
-			<div style = "display:hide;" ><input type="text" name="nombre_cantidad_gr" value=0 size=5 required/></div>
+			<div style = "display:hide;" ><input type="text" name="nombre_cantidad_gr" value=0 size=20 required/></div>
 		</td>
 		<td><div id="guardar_nuevo" style="display: hide;">
 				<input style="background-image: url({% static "image/guardar.jpeg" %}); background-repeat: no-repeat; background-size: 100% 100%; color: white; height: 48px; width: 48px; border: hidden;" type="submit" value=" ">
@@ -62,18 +61,14 @@
 	</table>
  <script type="text/javascript">
 	function editar(opcion){
-		{% for nutriente in nutrientes %}		
+		{% for nutriente in nutrienteAlimento %}		
 				document.getElementsByClassName("{{nutriente.nutriente}}"+"Input")[0].style.display = 'none';
 				document.getElementsByClassName("{{nutriente.nutriente}}")[0].style.display = 'block';
-				document.getElementsByClassName("{{nutriente.nutriente}}"+"Input")[1].style.display = 'none';
-				document.getElementsByClassName("{{nutriente.nutriente}}")[1].style.display = 'block';
 				document.getElementById("editar_"+"{{nutriente.nutriente}}").style.display = 'block';		
 				document.getElementById("guardar_"+"{{nutriente.nutriente}}").style.display = 'none';		
 		{% endfor %}		
 		document.getElementsByClassName(opcion)[0].style.display = 'none';
-		document.getElementsByClassName(opcion+"Input")[0].style.display = 'block';		
-		document.getElementsByClassName(opcion)[1].style.display = 'none';
-		document.getElementsByClassName(opcion+"Input")[1].style.display = 'block';		
+		document.getElementsByClassName(opcion+"Input")[0].style.display = 'block';			
 		document.getElementById("guardar_"+opcion).style.display = 'block';		
 		document.getElementById("editar_"+opcion).style.display = 'none';		
 	}
