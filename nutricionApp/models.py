@@ -3,14 +3,15 @@ from django.db import models
 # Create your models here.
 
 class Paciente(models.Model):
-    fecha_nacimiento = models.DateTimeField()
+    fecha_nacimiento = models.BigIntegerField(default=1)
     nombres = models.CharField(max_length=254, null=False)
     correo = models.EmailField(null=False,max_length=254,unique=True)
     peso = models.DecimalField(max_digits=5, decimal_places=2)
     estatura_cm = models.IntegerField()
     ejercicio = models.IntegerField()
     genero = models.CharField(max_length=1)
-    
+    password = models.CharField(default="12345",max_length=10)
+
     def __str__(self):
         return self.correo
 class Medico(models.Model):
@@ -110,6 +111,6 @@ class Precendente_Regla(models.Model):
     precendente = models.ForeignKey(Nutriente_Etiqueta)
     
     def __str__(self):
-        return self.regla_id
+        return u'%s %s' % (self.regla.nombre, self.precendente)
 
 

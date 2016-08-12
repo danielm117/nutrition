@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 #!/usr/local/bin/python
 from django.shortcuts import render
-import chardet
+import chardet, json
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
 # Create your views here.
 from django.shortcuts import render
 from django.template import loader, Context, RequestContext
-from nutricionApp.models import Alimento, Paciente, Nutriente, Etiqueta, Nutriente_Etiqueta, Funcion_Lineal,Gramosporporcion,Cantidad_Nutriente_Alimento
+from nutricionApp.models import Alimento, Paciente, Nutriente, Etiqueta, Nutriente_Etiqueta, Funcion_Lineal,Gramosporporcion,Cantidad_Nutriente_Alimento, Medico, Medico_Paciente, Recomendacion, Regla
 from django.http import HttpResponse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, render_to_response
@@ -126,6 +128,23 @@ def listar_etiquetasNutriente(request,n):
     template = loader.get_template("etiquetasNutriente.html")
     context = RequestContext(request,diccionario)
     return HttpResponse({template.render(context)})
+def listar_reglas(request):
+    try:
+        reglas=Regla.objects.all()
+    except:
+        reglas=None
+        error="No se pudo obtener el listado de etiquetas"
+        diccionario={'error_message':error}
+
+    if not reglas:
+        error="No hay etiquetas Registrados" 
+        diccionario={'error_message':error}       
+    else:
+        diccionario={'reglas':reglas}      
+
+    template = loader.get_template("reglas.html")
+    context = RequestContext(request,diccionario)
+    return HttpResponse({template.render(context)})
 def listar_etiquetas(request):
     try:
         etiquetas=Etiqueta.objects.all()
@@ -143,7 +162,21 @@ def listar_etiquetas(request):
     template = loader.get_template("etiquetas.html")
     context = RequestContext(request,diccionario)
     return HttpResponse({template.render(context)})
-    
+def listar_recomendaciones(request):
+    try:
+        recomendaciones=Recomendacion.objects.all()
+    except:
+        recomendaciones=None
+        error="No se pudo obtener el listado de recomendaciones"
+        diccionario={'error_message':error}
+    if not recomendaciones:
+        error="No hay recomendaciones Registrados" 
+        diccionario={'error_message':error}       
+    else:
+        diccionario={'recomendaciones':recomendaciones}      
+    template = loader.get_template("recomendaciones.html")
+    context = RequestContext(request,diccionario)
+    return HttpResponse({template.render(context)})
 def guardar_funciones(request):
     error = False
     funcionesrequest = request.GET
@@ -239,6 +272,23 @@ def guardar_etiquetas(request):
     for e in etiquetas:
         e.save()    
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+def guardar_recomendaciones(request):
+    error = False
+    test2=[]
+    etiquetasrequest = request.GET
+    etiquetasId=[]
+    etiquetas=[]
+    etiqueta=None
+    for e in etiquetasrequest.keys():
+        if e.split('_',1)[0] not in etiquetasId:
+            etiquetasId.append(e.split('_',1)[0])
+            etiqueta=Recomendacion.objects.filter(pk=e.split('_',1)[0])[0]
+            etiquetas.append(etiqueta)
+        if e.split('_',1)[1]=='descripcion':
+            etiqueta.descripcion=etiquetasrequest[e]
+    for e in etiquetas:
+        e.save()    
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 def guardar_alimentos(request):
     error = False
     test2=[]
@@ -302,6 +352,11 @@ def guardar_nueva_etiqueta(request):
     nueva = Etiqueta(nombre=nutrientesrequest.get('nombre_etiqueta'))
     nueva.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+def guardar_nueva_recomendacion(request):
+    nutrientesrequest = request.GET
+    nueva = Recomendacion(descripcion=nutrientesrequest.get('descripcion_recomendacion'))
+    nueva.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 def eliminar_nutriente_etiqueta(request):
     etiquetarequest = request.GET
     pk = etiquetarequest.get('pk');
@@ -318,6 +373,12 @@ def eliminar_etiqueta(request):
     etiquetarequest = request.GET
     pk = etiquetarequest.get('pk');
     etiqueta = Etiqueta.objects.filter(pk=pk)[0]
+    etiqueta.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+def eliminar_recomendacion(request):
+    etiquetarequest = request.GET
+    pk = etiquetarequest.get('pk');
+    etiqueta = Recomendacion.objects.filter(pk=pk)[0]
     etiqueta.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 def eliminar_nutriente(request):
@@ -345,11 +406,14 @@ def eliminar_funcion(request):
     funcion.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 def get_data(request):
+    database_name="nutricionApp"
+    password="tesistesis"
+    user="tesis"
     filename = os.path.dirname(__file__)+"/database/database.sqlite"
     outputFileName = os.path.dirname(__file__)+"/database/SQLiteData.sql"
     output = open(outputFileName, "w")
     mysql2sqlite = os.path.dirname(__file__)+"/scripts/mysql2sqlitedata.sh"
-    command1 = 'mysql -h localhost -u tesis -ptesistesis -N information_schema -e "select table_name from tables where table_schema = \'nutricionApp\' and table_name like \'nutricionApp_%\' and table_name not like \'nutricionApp_services\' and table_name not like \'nutricionApp_paciente\' and table_name not like \'nutricionApp_medico\' and table_name not like \'nutricionApp_medico_paciente\'" > tables.txt'
+    command1 = 'mysql -h localhost -u '+user+' -p'+password+' -N information_schema -e "select table_name from tables where table_schema =\''+database_name+'\' and table_name like \'nutricionApp_%\' and table_name not like \'nutricionApp_services\' and table_name not like \'nutricionApp_paciente\' and table_name not like \'nutricionApp_medico\' and table_name not like \'nutricionApp_medico_paciente\'" > tables.txt'
     #print 'comando: '+command1
     os.system(command1)
     tables = ''
@@ -357,8 +421,8 @@ def get_data(request):
         for line in tablesfile:
             tables = tables+line.rstrip('\n')+' '
         tablesfile.close()
-    command2 = 'sh %s -h localhost -u tesis -ptesistesis nutricionApp %s | sed "%s" > %s' % (
-        mysql2sqlite, tables, "s/\\\\'//g", filename)
+    command2 = 'sh %s -h localhost -u %s -p%s %s %s | sed "%s" > %s' % (
+        mysql2sqlite,user,password,database_name, tables, "s/\\\\'//g", filename)
     os.system(command2)
 
     with open(filename, encoding = "ISO-8859-1") as fileDB:
@@ -378,5 +442,76 @@ def get_data(request):
     template = loader.get_template("database.html")
     context = RequestContext(request,diccionario)
     return HttpResponse({template.render(context)})
+def api_op(request):
+    funcionesrequest = request.GET
+    operacion=request.GET["_operation"]
+    diccionario=None
+    if operacion == "get_requests":
+        diccionario=obtenerMedicos(request,request.GET["email"],True)
+    elif operacion == "confirm_request":
+        diccionario=confirmarSolicitudMedico(request,request.GET["follower_email"],request.GET["followed_email"],True)
+    elif operacion == "create_patient":
+        diccionario=crearUsuarioPaciente(request)
+    elif operacion == "login":
+        diccionario=accederAlSistema(request)
+    elif operacion == "update_intake":
+        diccionario=actualizarConsumos(request)
+    return HttpResponse(json.dumps(diccionario))
+#http://127.0.0.1:8000/api/?_operation=get_requests&email=dadaoros@gmail.com
+def obtenerMedicos(request,email,soloPendientes):
+    medicos=[]
+    if soloPendientes is True:
+        mp=[]
+        try:
+            mp=Medico_Paciente.objects.filter(paciente=Paciente.objects.get(correo=email).id, seguimiento=False)
+        except ObjectDoesNotExist:
+            print ("not found")
+        for m in mp:
+            medicos.append({"nombre":m.medico.nombres,"clinica":m.medico.empresa,"email":m.medico.correo})
+        print (medicos)
+        diccionario={"result":True,"data": medicos }
+        return diccionario
 
+    return True
+#http://127.0.0.1:8000/api/?_operation=confirm_request&follower_email=correo%40fian.org&followed_email=dadaoros%40gmail.com&confirm=true
+def confirmarSolicitudMedico(request,emailMedico,emailPaciente,acepto):
+    medicos=[]
+    result=False
+    data=None
+    if acepto is True:
+        mp=[]
+        try:
+            mp=Medico_Paciente.objects.get(paciente=Paciente.objects.get(correo=emailPaciente).id, medico=Medico.objects.get(correo=emailMedico).id)
+            mp.seguimiento=True
+            mp.save()
+            result=True
+            data=mp.medico.correo
+        except ObjectDoesNotExist:
+            print ("not found")
+        print (mp)
+        diccionario={"result":result,"data": data }
+        return diccionario
+    return True
+#http://127.0.0.1:8000/api/?_operation=create_patient&genero=f&estatura=180&nombre=Pablo+poncio&email=ryuuzakiupldr%40gmail.com&ejercicio=3&nacimiento=703900800&peso=65.0
+def crearUsuarioPaciente(request):
+    result=False
+    try:
+        nuevoPaciente=Paciente(correo=request.GET["email"],nombres=request.GET["nombre"],fecha_nacimiento=request.GET["nacimiento"],peso=request.GET["peso"],estatura_cm=request.GET["estatura"],ejercicio=request.GET["ejercicio"],genero=request.GET["genero"])
+        nuevoPaciente.save()
+        print(nuevoPaciente.correo)
+        result=True
+    except IntegrityError:
+        print("already exist")
+    diccionario={"result":result,"data": "" }
+    return diccionario
+#/api/?_operation=login&pass=hello&email=dadaoros%40gmail.com
+def accederAlSistema(request):
+    result=False
+    diccionario={"result":result,"data": "" }
+    paciente=Paciente.objects.filter(correo=request.GET["email"])[0]
+    if(paciente):
+        if(paciente.password == request.GET["pass"]):
+            result=True    
+            diccionario={"result":result,"data": {"email":paciente.correo,"nombres":paciente.nombres,"nacimiento":str(paciente.fecha_nacimiento),"peso":str(paciente.peso),"estatura":str(paciente.estatura_cm),"ejercicio":str(paciente.ejercicio),"genero":paciente.genero} }
+    return diccionario
     

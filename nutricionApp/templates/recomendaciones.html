@@ -1,0 +1,64 @@
+{% extends "home.html" %}
+{% load staticfiles %}
+
+{% block pestana %}
+	<br/>
+	Lista de recomendaciones
+	<br/>
+	<table class="table table-striped table-hover table-condensed" >
+  	<tr>
+    	<th>recomendaciones</th>
+    	<th>Editar</th> 
+    	<th>Borrar</th>
+    </tr>
+	{% for recomendacion in recomendaciones %}
+    <form action="/guardar_recomendaciones/" method="get">
+      <tr>
+		<td>
+			<div class ='{{recomendacion.pk}}'>{{recomendacion.descripcion}}</div>
+			<div class ='{{recomendacion.pk}}Input' style = "display:none;"><input type="text" name="{{recomendacion.pk}}_descripcion" value="{{recomendacion.descripcion}}" size=40></div>
+		</td>
+		<td>
+			<div id="editar_{{recomendacion.pk}}">
+				<a onclick="editar('{{recomendacion.pk}}')"><img style="width: 40px;"src="http://www.zoanthus.es/imgs/encuesta.png"  class="img-rounded"></a>
+			</div>
+			<div id="guardar_{{recomendacion.pk}}" style="display: none;">
+				<input style="background-image: url({% static "image/guardar.jpeg" %}); background-repeat: no-repeat; background-size: 100% 100%; color: white; height: 48px; width: 48px; border: hidden;" type="submit" value=" ">
+			</div>
+		</td>
+		<td><a href="http://127.0.0.1:8000/eliminar_recomendacion/?pk={{recomendacion.pk}}"><img style="width: 48px;" src="{% static "image/trash.png" %}" class="img-rounded"></a></td>
+	   </tr>
+	</form>	    	    
+    {% endfor %}
+    
+    <form action="/guardar_nueva_recomendacion/" method="get">    
+    <tr>
+		<td>
+			<div style = "display:hide;" ><input type="text" name="descripcion_recomendacion"  size=15 required/></div>
+		</td>
+		<td><div id="guardar_nuevo" style="display: hide;">
+				<input style="background-image: url({% static "image/guardar.jpeg" %}); background-repeat: no-repeat; background-size: 100% 100%; color: white; height: 48px; width: 48px; border: hidden;" type="submit" value=" ">
+			</div>
+		</td>
+		<td></td>
+    </tr>
+   	</form>	  
+
+	</table>
+ <script type="text/javascript">
+	function editar(opcion){
+		{% for recomendacion in recomendaciones %}		
+				document.getElementsByClassName("{{recomendacion.pk}}"+"Input")[0].style.display = 'none';
+				document.getElementsByClassName("{{recomendacion.pk}}")[0].style.display = 'block';
+				document.getElementById("editar_"+"{{recomendacion.pk}}").style.display = 'block';		
+				document.getElementById("guardar_"+"{{recomendacion.pk}}").style.display = 'none';		
+		{% endfor %}		
+		document.getElementsByClassName(opcion)[0].style.display = 'none';
+		document.getElementsByClassName(opcion+"Input")[0].style.display = 'block';			
+		document.getElementById("guardar_"+opcion).style.display = 'block';		
+		document.getElementById("editar_"+opcion).style.display = 'none';		
+	}
+</script>
+
+{{error_message}}
+{% endblock %}

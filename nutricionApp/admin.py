@@ -12,6 +12,7 @@ from .models import Cantidad_Nutriente_Alimento
 from .models import Nutriente_Etiqueta
 from .models import Funcion_Lineal
 from .models import Precendente_Regla
+from .models import Medico_Paciente
 
 # Register your models here.
 admin.site.register(Paciente)
@@ -27,5 +28,6 @@ admin.site.register(Cantidad_Nutriente_Alimento)
 admin.site.register(Nutriente_Etiqueta)
 admin.site.register(Funcion_Lineal)
 admin.site.register(Precendente_Regla)
+admin.site.register(Medico_Paciente)
 
 

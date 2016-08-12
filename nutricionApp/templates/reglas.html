@@ -1,0 +1,117 @@
+{% extends "home.html" %}
+{% load staticfiles %}
+
+{% block pestana %}
+	<br>
+	<div>Lista de reglas</div>
+	<br>
+	{{reglas}}
+	<style type="text/css">
+		.regla_body{
+			margin-left: 5%;
+		}
+		.regla_header{
+			width: 100%;
+			float: left;
+		}
+		.regla_precedente{
+			margin-top: 20px;
+			width: 100%;
+			float:left;
+		}
+		.precedentes{
+			float: left;
+			width: auto;
+			margin-left: 10px;
+		}
+		.consecuente{
+			float: left;
+			width: auto;
+			margin-left: 10px;
+		}
+		.recomendacion{
+			float: left;
+			width: auto;
+			margin-left: 10px;
+		}
+		.regla_consecuente{
+			width: 100%;
+			float:left;
+		}
+		.regla_recomendacion{
+			width: 100%;
+			float:left;
+		}
+		.titulos{
+			float: left;
+			width: auto;
+
+		}
+		.buttons{
+			padding-left: 10px;
+			float: left;
+			width: auto;
+
+		}
+		.regla{
+			margin-top: 25px;
+			float: left;
+			width: auto;
+
+		}
+	</style>
+	<div>
+	{% for regla in reglas %}
+		<div class ="regla">
+			<div class="regla_header">
+				<div class="titulos">
+				{{regla.nombre}}
+				</div>
+				<div class="buttons">
+					<a onclick="editar('{{alimento.nombre}}')"><img style="width: 30px;" src="{% static "image/editar.png" %}"  class="img-rounded"></a>
+				</div>
+				<div class="buttons">
+					<input style="background-image: url({% static "image/guardar.jpeg" %}); background-repeat: no-repeat; background-size: 100% 100%; color: white; height: 30px; width: 30px; border: hidden;" type="submit" value=" ">
+				</div>
+				<div class="buttons">
+					<a href="http://127.0.0.1:8000/eliminar_alimento/?pk={{alimento.pk}}"><img style="width: 30px;" src="{% static "image/trash.png" %}" class="img-rounded"></a>
+				</div>
+			</div>
+			<div class="regla_body">
+				<div class="regla_precedente">
+					<div class="titulos">
+						Precendente
+					</div>
+					<div class="precedentes">
+						Calcio Alto
+					</div>
+					<div class="precedentes">
+						Y
+					</div>
+					<div class="precedentes">
+						Calcio Alto
+					</div>
+				</div>
+				<div class="regla_consecuente">
+					<div class="titulos">
+						Consecuente
+					</div>
+					<div class="consecuente">
+						{{regla.consecuente}}
+					</div>
+				</div>
+				<div class="regla_recomendacion">
+					<div class="titulos">
+						Recomendaciones
+					</div>
+					<div class="recomendacion">
+						{{regla.recomendacion.descripcion}}
+					</div>
+				</div>
+			</div>
+		</div>
+	{% endfor %}
+	</div>
+
+{{error_message}}
+{% endblock %}
