@@ -34,5 +34,7 @@ urlpatterns = [
     url(r'^eliminar_funcion/$', 'nutricionApp.views.eliminar_funcion'),
     url(r'^eliminar_nutrientesAlimento/$', 'nutricionApp.views.eliminar_nutrientesAlimento'),
     url(r'^database/odata/$', 'nutricionApp.views.get_data'),
+    url(r'^api/$', 'nutricionApp.views.api_op'),
+
 
 ]

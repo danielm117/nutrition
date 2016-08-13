@@ -62,7 +62,7 @@ class Medico_Paciente(models.Model):
     seguimiento = models.BooleanField(null=False)
 
     def __str__(self):
-        return self.tamano_porcion
+        return u'%s %s' % (self.paciente.nombres, self.medico.nombres)
 
 class Paciente_Alimento_Porcion(models.Model):
     paciente = models.ForeignKey(Paciente)
@@ -70,7 +70,7 @@ class Paciente_Alimento_Porcion(models.Model):
     tamano_porcion = models.DecimalField(max_digits=15, decimal_places=3)
     fecha_consumo = models.DateTimeField()
     def __str__(self):
-        return self.tamano_porcion
+        return u'%s %s' % (self.paciente.nombres, self.fecha_consumo)
 
 class Cantidad_Nutriente_Alimento(models.Model):
     nutriente = models.ForeignKey(Nutriente)

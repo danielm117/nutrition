@@ -7,7 +7,7 @@ from django.db import IntegrityError
 # Create your views here.
 from django.shortcuts import render
 from django.template import loader, Context, RequestContext
-from nutricionApp.models import Alimento, Paciente, Nutriente, Etiqueta, Nutriente_Etiqueta, Funcion_Lineal,Gramosporporcion,Cantidad_Nutriente_Alimento, Medico, Medico_Paciente, Recomendacion, Regla
+from nutricionApp.models import Alimento, Paciente, Nutriente, Etiqueta, Nutriente_Etiqueta, Funcion_Lineal,Gramosporporcion,Cantidad_Nutriente_Alimento, Medico, Medico_Paciente, Recomendacion, Regla, Precendente_Regla
 from django.http import HttpResponse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, render_to_response
@@ -131,6 +131,9 @@ def listar_etiquetasNutriente(request,n):
 def listar_reglas(request):
     try:
         reglas=Regla.objects.all()
+        precedentes=Precendente_Regla.objects.all()
+        nutrienteEtiqueta=Nutriente_Etiqueta.objects.all()
+        recomendaciones = Recomendacion.objects.all()
     except:
         reglas=None
         error="No se pudo obtener el listado de etiquetas"
@@ -140,7 +143,7 @@ def listar_reglas(request):
         error="No hay etiquetas Registrados" 
         diccionario={'error_message':error}       
     else:
-        diccionario={'reglas':reglas}      
+        diccionario={'reglas':reglas, 'precedentes': precedentes, 'nutrienteEtiqueta':nutrienteEtiqueta, 'recomendaciones':recomendaciones}      
 
     template = loader.get_template("reglas.html")
     context = RequestContext(request,diccionario)
@@ -508,7 +511,11 @@ def crearUsuarioPaciente(request):
 def accederAlSistema(request):
     result=False
     diccionario={"result":result,"data": "" }
-    paciente=Paciente.objects.filter(correo=request.GET["email"])[0]
+    paciente=None
+    try:
+        paciente=Paciente.objects.get(correo=request.GET["email"])
+    except ObjectDoesNotExist:
+        result=False
     if(paciente):
         if(paciente.password == request.GET["pass"]):
             result=True    

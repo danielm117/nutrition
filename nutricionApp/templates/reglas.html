@@ -4,8 +4,10 @@
 {% block pestana %}
 	<br>
 	<div>Lista de reglas</div>
-	<br>
+<!-- 	<br>
 	{{reglas}}
+	<br>
+	{{precedentes}} -->
 	<style type="text/css">
 		.regla_body{
 			margin-left: 5%;
@@ -51,7 +53,6 @@
 			padding-left: 10px;
 			float: left;
 			width: auto;
-
 		}
 		.regla{
 			margin-top: 25px;
@@ -59,18 +60,29 @@
 			width: auto;
 
 		}
+		.precedentes_input{
+			display: none;
+		}
+		.consecuente_input{
+			display: none;
+		}
+		.recomendacion_input{
+			display: none;
+		}
+		
 	</style>
 	<div>
 	{% for regla in reglas %}
+		<form action="/guardar_funciones/" method="get" autocomplete="off">
 		<div class ="regla">
 			<div class="regla_header">
 				<div class="titulos">
 				{{regla.nombre}}
 				</div>
-				<div class="buttons">
-					<a onclick="editar('{{alimento.nombre}}')"><img style="width: 30px;" src="{% static "image/editar.png" %}"  class="img-rounded"></a>
+				<div class="buttons {{regla.pk}}">
+					<a onclick="editar('{{regla.pk}}')"><img style="width: 30px;" src="{% static "image/editar.png" %}"  class="img-rounded"></a>
 				</div>
-				<div class="buttons">
+				<div class="buttons {{regla.pk}}Input"  style="display:none">
 					<input style="background-image: url({% static "image/guardar.jpeg" %}); background-repeat: no-repeat; background-size: 100% 100%; color: white; height: 30px; width: 30px; border: hidden;" type="submit" value=" ">
 				</div>
 				<div class="buttons">
@@ -80,38 +92,101 @@
 			<div class="regla_body">
 				<div class="regla_precedente">
 					<div class="titulos">
-						Precendente
+						Precedente
 					</div>
-					<div class="precedentes">
-						Calcio Alto
+					<div class="{{regla.pk}}">
+					{% for p in precedentes %}
+						{% if p.regla.pk == regla.pk %}
+							<div class="precedentes">
+							{{p.precendente}}
+							</div>
+						{% endif %}
+					{% endfor %}
 					</div>
-					<div class="precedentes">
-						Y
+					<div class="precedentes_input {{regla.pk}}Input">
+						{% for p in precedentes %}
+							{% if p.regla.pk == regla.pk %}
+								<select name="precedentes_select">
+									{% for ne in nutrienteEtiqueta %}
+										{% if p.precendente.pk == ne.pk %}
+											<option value="{{p.precendente.pk}}" selected>{{ne.nutriente}} {{ne.etiqueta}}</option>
+										{% else %}
+											<option value="{{p.precendente.pk}}">{{ne.nutriente}} {{ne.etiqueta}}</option>
+										{% endif %}
+									{% endfor %}
+								</select> 
+							{% endif %}
+						{% endfor %}
 					</div>
-					<div class="precedentes">
-						Calcio Alto
-					</div>
+					
 				</div>
 				<div class="regla_consecuente">
 					<div class="titulos">
 						Consecuente
 					</div>
-					<div class="consecuente">
+					<div class="consecuente {{regla.pk}}">
 						{{regla.consecuente}}
+					</div>
+					<div class="consecuente_input {{regla.pk}}Input">
+						<select name="etiqueta">
+							{% for ne in nutrienteEtiqueta %}
+								{% if regla.consecuente.pk == ne.pk %}
+									<option value="{{regla.consecuente.pk}}" selected>{{ne.nutriente}} {{ne.etiqueta}}</option>
+								{% else %}
+									<option value="{{regla.consecuente.pk}}">{{ne.nutriente}} {{ne.etiqueta}}</option>
+								{% endif %}
+							{% endfor %}
+						</select> 
 					</div>
 				</div>
 				<div class="regla_recomendacion">
 					<div class="titulos">
 						Recomendaciones
 					</div>
-					<div class="recomendacion">
+					<div class="recomendacion {{regla.pk}}">
 						{{regla.recomendacion.descripcion}}
+					</div>
+					<div class="recomendacion_input {{regla.pk}}Input">
+						<select name="recomendacion">
+						{% for reco in recomendaciones %}
+							{% if regla.recomendacion.pk == reco.pk %}
+								<option value="{{regla.recomendacion.pk}}" autocomplete="off" selected>{{reco.descripcion}}</option>
+							{% else %}
+								<option value="{{regla.recomendacion.pk}}">{{reco.descripcion}}</option>
+							{% endif %}
+						{% endfor %}
+						</select> 
 					</div>
 				</div>
 			</div>
 		</div>
+	</form>
 	{% endfor %}
 	</div>
+ <script type="text/javascript">
+	function editar(opcion){
+		{% for regla in reglas %}		
+				document.getElementsByClassName("{{regla.pk}}"+"Input")[0].style.display = 'none';
+				document.getElementsByClassName("{{regla.pk}}")[0].style.display = 'block';
+				document.getElementsByClassName("{{regla.pk}}"+"Input")[1].style.display = 'none';
+				document.getElementsByClassName("{{regla.pk}}")[1].style.display = 'block';
+				document.getElementsByClassName("{{regla.pk}}"+"Input")[2].style.display = 'none';
+				document.getElementsByClassName("{{regla.pk}}")[2].style.display = 'block';
+				document.getElementsByClassName("{{regla.pk}}"+"Input")[3].style.display = 'none';
+				document.getElementsByClassName("{{regla.pk}}")[3].style.display = 'block';
 
+		{% endfor %}		
+		console.log(opcion)
+		document.getElementsByClassName(opcion)[0].style.display = 'none';
+		document.getElementsByClassName(opcion+"Input")[0].style.display = 'block';
+		document.getElementsByClassName(opcion+"Input")[1].style.display = 'block';
+		document.getElementsByClassName(opcion)[1].style.display = 'none';
+		document.getElementsByClassName(opcion+"Input")[2].style.display = 'block';
+		document.getElementsByClassName(opcion)[2].style.display = 'none';
+		document.getElementsByClassName(opcion+"Input")[3].style.display = 'block';
+		document.getElementsByClassName(opcion)[3].style.display = 'none';
+
+	}
+</script>
 {{error_message}}
 {% endblock %}
