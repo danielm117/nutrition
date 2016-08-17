@@ -245,6 +245,29 @@ def guardar_nutrientes(request):
     for n in nutrientes:
         n.save()    
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+def guardar_reglas(request):
+    regla_request = request.GET
+    print(regla_request)
+    for n in regla_request.keys():
+        if(n.split('_',1)[0]=='precedentes'):  
+            precedente_pk = n.split('_',1)[1]
+            precedente=Precendente_Regla.objects.get(pk=precedente_pk)
+            nutriente_etiqueta = Nutriente_Etiqueta.objects.get(pk=regla_request[n])
+            precedente.precendente = nutriente_etiqueta
+            precedente.save()
+        if(n.split('_',1)[0]=='consecuente'):  
+            regla_pk = n.split('_',1)[1]
+            regla=Regla.objects.get(pk=regla_pk)
+            nutriente_etiqueta = Nutriente_Etiqueta.objects.get(pk=regla_request[n])
+            regla.consecuente = nutriente_etiqueta
+            regla.save()
+        if(n.split('_',1)[0]=='recomendacion'):  
+            regla_pk = n.split('_',1)[1]
+            regla=Regla.objects.get(pk=regla_pk)
+            recomendacion = Recomendacion.objects.get(pk=regla_request[n])
+            regla.recomendacion = recomendacion
+            regla.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 def guardar_nutrientesAlimento(request):
     nutrienterequest = request.GET
     for n in nutrienterequest.keys():
@@ -364,6 +387,12 @@ def eliminar_nutriente_etiqueta(request):
     etiquetarequest = request.GET
     pk = etiquetarequest.get('pk');
     nutriente_etiqueta = Nutriente_Etiqueta.objects.filter(pk=pk)[0]
+    nutriente_etiqueta.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+def eliminar_regla(request):
+    etiquetarequest = request.GET
+    pk = etiquetarequest.get('pk');
+    nutriente_etiqueta = Regla.objects.filter(pk=pk)[0]
     nutriente_etiqueta.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 def eliminar_nutrientesAlimento(request):

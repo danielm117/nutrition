@@ -73,7 +73,7 @@
 	</style>
 	<div>
 	{% for regla in reglas %}
-		<form action="/guardar_funciones/" method="get" autocomplete="off">
+		<form action="/guardar_reglas/" method="get" autocomplete="off">
 		<div class ="regla">
 			<div class="regla_header">
 				<div class="titulos">
@@ -86,7 +86,7 @@
 					<input style="background-image: url({% static "image/guardar.jpeg" %}); background-repeat: no-repeat; background-size: 100% 100%; color: white; height: 30px; width: 30px; border: hidden;" type="submit" value=" ">
 				</div>
 				<div class="buttons">
-					<a href="http://127.0.0.1:8000/eliminar_alimento/?pk={{alimento.pk}}"><img style="width: 30px;" src="{% static "image/trash.png" %}" class="img-rounded"></a>
+					<a href="eliminar_regla/?pk={{regla.pk}}"><img style="width: 30px;" src="{% static "image/trash.png" %}" class="img-rounded"></a>
 				</div>
 			</div>
 			<div class="regla_body">
@@ -106,12 +106,12 @@
 					<div class="precedentes_input {{regla.pk}}Input">
 						{% for p in precedentes %}
 							{% if p.regla.pk == regla.pk %}
-								<select name="precedentes_select">
+								<select name="precedentes_{{p.pk}}">
 									{% for ne in nutrienteEtiqueta %}
 										{% if p.precendente.pk == ne.pk %}
-											<option value="{{p.precendente.pk}}" selected>{{ne.nutriente}} {{ne.etiqueta}}</option>
+											<option value="{{ne.pk}}" selected>{{ne.nutriente}} {{ne.etiqueta}}</option>
 										{% else %}
-											<option value="{{p.precendente.pk}}">{{ne.nutriente}} {{ne.etiqueta}}</option>
+											<option value="{{ne.pk}}">{{ne.nutriente}} {{ne.etiqueta}}</option>
 										{% endif %}
 									{% endfor %}
 								</select> 
@@ -128,12 +128,12 @@
 						{{regla.consecuente}}
 					</div>
 					<div class="consecuente_input {{regla.pk}}Input">
-						<select name="etiqueta">
+						<select name="consecuente_{{regla.pk}}">
 							{% for ne in nutrienteEtiqueta %}
 								{% if regla.consecuente.pk == ne.pk %}
-									<option value="{{regla.consecuente.pk}}" selected>{{ne.nutriente}} {{ne.etiqueta}}</option>
+									<option value="{{ne.pk}}" selected>{{ne.nutriente}} {{ne.etiqueta}}</option>
 								{% else %}
-									<option value="{{regla.consecuente.pk}}">{{ne.nutriente}} {{ne.etiqueta}}</option>
+									<option value="{{ne.pk}}">{{ne.nutriente}} {{ne.etiqueta}}</option>
 								{% endif %}
 							{% endfor %}
 						</select> 
@@ -147,12 +147,12 @@
 						{{regla.recomendacion.descripcion}}
 					</div>
 					<div class="recomendacion_input {{regla.pk}}Input">
-						<select name="recomendacion">
+						<select name="recomendacion_{{regla.pk}}">
 						{% for reco in recomendaciones %}
 							{% if regla.recomendacion.pk == reco.pk %}
-								<option value="{{regla.recomendacion.pk}}" autocomplete="off" selected>{{reco.descripcion}}</option>
+								<option value="{{reco.pk}}" autocomplete="off" selected>{{reco.descripcion}}</option>
 							{% else %}
-								<option value="{{regla.recomendacion.pk}}">{{reco.descripcion}}</option>
+								<option value="{{reco.pk}}">{{reco.descripcion}}</option>
 							{% endif %}
 						{% endfor %}
 						</select> 
