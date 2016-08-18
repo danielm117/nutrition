@@ -20,6 +20,7 @@ urlpatterns = [
     url(r'^guardar_recomendaciones/$', 'nutricionApp.views.guardar_recomendaciones'),
     url(r'^guardar_nutrientesAlimento/$', 'nutricionApp.views.guardar_nutrientesAlimento'),
     url(r'^guardar_nuevo_etiqueta_nutriente/$', 'nutricionApp.views.guardar_nuevo_etiqueta_nutriente'),
+    url(r'^guardar_nueva_regla/$', 'nutricionApp.views.guardar_nueva_regla'),
     url(r'^guardar_nuevo_nutriente/$', 'nutricionApp.views.guardar_nuevo_nutriente'),
     url(r'^guardar_nueva_etiqueta/$', 'nutricionApp.views.guardar_nueva_etiqueta'),
     url(r'^guardar_nueva_recomendacion/$', 'nutricionApp.views.guardar_nueva_recomendacion'),

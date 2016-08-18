@@ -247,7 +247,6 @@ def guardar_nutrientes(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 def guardar_reglas(request):
     regla_request = request.GET
-    print(regla_request)
     for n in regla_request.keys():
         if(n.split('_',1)[0]=='precedentes'):  
             precedente_pk = n.split('_',1)[1]
@@ -261,12 +260,36 @@ def guardar_reglas(request):
             nutriente_etiqueta = Nutriente_Etiqueta.objects.get(pk=regla_request[n])
             regla.consecuente = nutriente_etiqueta
             regla.save()
-        if(n.split('_',1)[0]=='recomendacion'):  
+        if(n.split('_',1)[0]=='recomendacion'):
             regla_pk = n.split('_',1)[1]
             regla=Regla.objects.get(pk=regla_pk)
             recomendacion = Recomendacion.objects.get(pk=regla_request[n])
             regla.recomendacion = recomendacion
             regla.save()
+        if(n.split('_',1)[0]=='nuevo'):
+            regla_pk = n.split('_',1)[1]
+            regla=Regla.objects.get(pk=regla_pk)
+            ne = Nutriente_Etiqueta.objects.get(pk=regla_request[n])
+            nuevoPrecedente = Precendente_Regla(regla = regla, precendente = ne)
+            nuevoPrecedente.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+def guardar_nueva_regla(request):
+    regla_request = request.GET
+    print(regla_request)
+    for n in regla_request.keys():
+        if(n=='nombre'):
+            nombre = regla_request[n]
+        if(n=='consecuente'):
+            consecuente = Nutriente_Etiqueta.objects.get(pk =regla_request[n])
+        if(n=='recomendacion'):
+            recomendacion = Recomendacion.objects.get(pk=regla_request[n])
+    regla_nueva = Regla(nombre=nombre,consecuente=consecuente,recomendacion=recomendacion)
+    regla_nueva.save()
+    for n in regla_request.keys():
+        if(n=='precedente'):
+            ne = Nutriente_Etiqueta.objects.get(pk =regla_request[n])
+    precedente_nuevo = Precendente_Regla(regla = regla_nueva, precendente = ne)
+    precedente_nuevo.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 def guardar_nutrientesAlimento(request):
     nutrienterequest = request.GET
