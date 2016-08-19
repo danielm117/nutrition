@@ -100,7 +100,7 @@ class Funcion_Lineal(models.Model):
         
 class Regla(models.Model):
     nombre = models.CharField(max_length=50, null=False,unique=True)
-    recomendacion = models.ForeignKey(Recomendacion)
+    recomendacion = models.CharField(max_length=500, null=False)
     consecuente = models.ForeignKey(Nutriente_Etiqueta)
 
     def __str__(self):

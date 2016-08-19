@@ -73,7 +73,7 @@
 	<div>
 	<div style="width:100%; float:left;">
 	{% for regla in reglas %}
-		<form action="/guardar_reglas/" method="get" autocomplete="off">
+		<form id="Form{{regla.pk}}" action="/guardar_reglas/" method="get" autocomplete="off">
 		<div class ="regla">
 			<div class="regla_header">
 				<div class="titulos">
@@ -155,18 +155,11 @@
 						Recomendaciones
 					</div>
 					<div class="recomendacion {{regla.pk}}">
-						{{regla.recomendacion.descripcion}}
+						{{regla.recomendacion}}
 					</div>
-					<div class="recomendacion_input {{regla.pk}}Input">
-						<select name="recomendacion_{{regla.pk}}">
-						{% for reco in recomendaciones %}
-							{% if regla.recomendacion.pk == reco.pk %}
-								<option value="{{reco.pk}}" autocomplete="off" selected>{{reco.descripcion}}</option>
-							{% else %}
-								<option value="{{reco.pk}}">{{reco.descripcion}}</option>
-							{% endif %}
-						{% endfor %}
-						</select> 
+					<div class="recomendacion_input {{regla.pk}}Input" style="width:100px;">
+						<textarea rows="5" cols="100" name="recomendacion_{{regla.pk}}" form="Form{{regla.pk}}">{{regla.recomendacion}} 
+						</textarea>
 					</div>
 				</div>
 			</div>
@@ -175,7 +168,7 @@
 	{% endfor %}
 	</div>
 	<div class="nueva_regla" style="width:100%; float;left">
-	<form action="/guardar_nueva_regla/" method="get" autocomplete="off">
+	<form id="Form_nuevo_{{regla.pk}}" action="/guardar_nueva_regla/" method="get" autocomplete="off">
 		<div class ="regla">
 			<div class="regla_header">
 				<div class="titulos">
@@ -217,11 +210,8 @@
 						Recomendaciones
 					</div>
 					<div class="recomendacion_input" style="display:block;">
-						<select name="recomendacion">
-						{% for reco in recomendaciones %}
-							<option value="{{reco.pk}}">{{reco.descripcion}}</option>
-						{% endfor %}
-						</select> 
+						<textarea rows="5" cols="100" name="recomendacion" form="Form_nuevo_{{regla.pk}}">
+						</textarea>
 					</div>
 				</div>
 			</div>

@@ -247,6 +247,7 @@ def guardar_nutrientes(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 def guardar_reglas(request):
     regla_request = request.GET
+    print(regla_request)
     for n in regla_request.keys():
         if(n.split('_',1)[0]=='precedentes'):  
             precedente_pk = n.split('_',1)[1]
@@ -263,8 +264,7 @@ def guardar_reglas(request):
         if(n.split('_',1)[0]=='recomendacion'):
             regla_pk = n.split('_',1)[1]
             regla=Regla.objects.get(pk=regla_pk)
-            recomendacion = Recomendacion.objects.get(pk=regla_request[n])
-            regla.recomendacion = recomendacion
+            regla.recomendacion = regla_request[n]
             regla.save()
         if(n.split('_',1)[0]=='nuevo'):
             regla_pk = n.split('_',1)[1]
@@ -282,7 +282,7 @@ def guardar_nueva_regla(request):
         if(n=='consecuente'):
             consecuente = Nutriente_Etiqueta.objects.get(pk =regla_request[n])
         if(n=='recomendacion'):
-            recomendacion = Recomendacion.objects.get(pk=regla_request[n])
+            recomendacion = regla_request[n]
     regla_nueva = Regla(nombre=nombre,consecuente=consecuente,recomendacion=recomendacion)
     regla_nueva.save()
     for n in regla_request.keys():
