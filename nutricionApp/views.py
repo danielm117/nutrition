@@ -183,8 +183,6 @@ def listar_recomendaciones(request):
 def guardar_funciones(request):
     error = False
     funcionesrequest = request.GET
-    funcionesId=[]
-    funciones=[]
     funcion=None
     nueva= Funcion_Lineal()
     nutiente_nuevo=None
@@ -192,11 +190,7 @@ def guardar_funciones(request):
     for f in funcionesrequest.keys():
         try:
             aux = int(f.split('_',1)[0])
-            if f.split('_',1)[0] not in funcionesId:
-                funcionesId.append(f.split('_',1)[0])
-                funcion=Funcion_Lineal.objects.filter(id=f.split('_',1)[0])[0]
-                funciones.append(funcion)
-                funciondict=funcionesrequest[f]
+            funcion=Funcion_Lineal.objects.get(id=f.split('_',1)[0])
             if f.split('_',1)[1]=='x1':
                 funcion.x1=funcionesrequest[f]
             elif f.split('_',1)[1]=='x2':
@@ -205,6 +199,7 @@ def guardar_funciones(request):
                 funcion.m=funcionesrequest[f]
             elif f.split('_',1)[1]=='b':
                 funcion.b=funcionesrequest[f]
+            funcion.save()
         except ValueError:
             etiqueta_nuevo = f.split('_',1)[0]
             if f.split('_',1)[1]=='x1':
@@ -215,9 +210,6 @@ def guardar_funciones(request):
                 nueva.m=funcionesrequest[f]
             elif f.split('_',1)[1]=='b':
                 nueva.b=funcionesrequest[f]
-
-    for f in funciones:
-        f.save()
     nutriente_nuevo = (request.META.get('HTTP_REFERER').split('/etiquetas',1)[1]).replace("/", "")
     n = Nutriente.objects.filter(nombre=nutriente_nuevo)[0].pk;
     e = Etiqueta.objects.filter(nombre=etiqueta_nuevo)[0].pk;
