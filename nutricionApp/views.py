@@ -199,6 +199,8 @@ def guardar_funciones(request):
                 funcion.m=funcionesrequest[f]
             elif f.split('_',1)[1]=='b':
                 funcion.b=funcionesrequest[f]
+            elif f.split('_',1)[1]=='unidad':
+                funcion.unidad_medida=funcionesrequest[f]
             funcion.save()
         except ValueError:
             etiqueta_nuevo = f.split('_',1)[0]
@@ -210,11 +212,13 @@ def guardar_funciones(request):
                 nueva.m=funcionesrequest[f]
             elif f.split('_',1)[1]=='b':
                 nueva.b=funcionesrequest[f]
+            elif f.split('_',1)[1]=='unidad':
+                nueva.unidad_medida=funcionesrequest[f]
     nutriente_nuevo = (request.META.get('HTTP_REFERER').split('/etiquetas',1)[1]).replace("/", "")
     n = Nutriente.objects.filter(nombre=nutriente_nuevo)[0].pk;
     e = Etiqueta.objects.filter(nombre=etiqueta_nuevo)[0].pk;
     nueva.conjunto = Nutriente_Etiqueta.objects.filter(etiqueta=e,nutriente=n)[0]
-    if (not((nueva.x1=="") or (nueva.x2=="") or (nueva.m=="") or (nueva.b==""))):
+    if (not((nueva.x1=="") or (nueva.x2=="") or (nueva.m=="") or (nueva.b=="") or (nueva.unidad_medida==""))):
         nueva.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 def guardar_nutrientes(request):

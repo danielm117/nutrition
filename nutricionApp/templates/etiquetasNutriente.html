@@ -22,7 +22,7 @@
 					{% for key, value in funciones_lineales.items %} 
 						{% if key == etiqueta.etiqueta.nombre %}
 							{% for v in value %} 
-								{{v.m|floatformat:4}}x + ({{v.b|floatformat:4}}) ; {{v.x1|floatformat:4}} &#60 x &#8804  {{v.x2|floatformat:4}} <br>
+								<div style="float:left;width:60%">{{v.m|floatformat:4}}x + ({{v.b|floatformat:4}}) ; {{v.x1|floatformat:4}} &#60 x &#8804  {{v.x2|floatformat:4}}</div><div style="color:red; float:left;"> &emsp;{{v.unidad_medida}}</div><br>
 							{% endfor %}
 						{% endif %}
 					{% endfor %}	
@@ -31,11 +31,11 @@
 					{% for key, value in funciones_lineales.items %} 
 						{% if key == etiqueta.etiqueta.nombre %}
 							{% for v in value %} 
-								<div id ='Funcion_{{etiqueta.etiqueta}}_{{v.id}}'><input type="text" name="{{v.id}}_m" value={{v.m|floatformat:4}} size=4 required/>x + (<input type="text" name="{{v.id}}_b" value={{v.b|floatformat:4}} size=4 required/>) ; <input type="text" name="{{v.id}}_x1" value={{v.x1|floatformat:4}} size=4 required/> &#60 x &#8804  <input type="text" name="{{v.id}}_x2" value={{v.x2|floatformat:4}} size=4 required/>  
+								<div id ='Funcion_{{etiqueta.etiqueta}}_{{v.id}}'><input type="text" name="{{v.id}}_m" value={{v.m|floatformat:4}} size=4 required/>x + (<input type="text" name="{{v.id}}_b" value={{v.b|floatformat:4}} size=4 required/>) ; <input type="text" name="{{v.id}}_x1" value={{v.x1|floatformat:4}} size=4 required/> &#60 x &#8804  <input type="text" name="{{v.id}}_x2" value={{v.x2|floatformat:4}} size=4 required/><input type="text" name="{{v.id}}_unidad" value={{v.unidad_medida}} size=1 required/>  
 								<a href="http://127.0.0.1:8000/eliminar_funcion/?pk={{v.pk}}"><img style="width: 30px;" src="{% static "image/trash.png" %}" class="img-rounded"></a>
 								</div> <br>
 							{% endfor %}
-								<div id ='Funcion_{{etiqueta.etiqueta}}_0'><input type="text" name="{{etiqueta.etiqueta}}_m" size=4>x + (<input type="text" name="{{etiqueta.etiqueta}}_b" size=4>) ; <input type="text" name="{{etiqueta.etiqueta}}_x1"  size=4> &#60 x &#8804  <input type="text" name="{{etiqueta.etiqueta}}_x2" size=4></div> <br>
+								<div id ='Funcion_{{etiqueta.etiqueta}}_0'><input type="text" name="{{etiqueta.etiqueta}}_m" size=4>x + (<input type="text" name="{{etiqueta.etiqueta}}_b" size=4>) ; <input type="text" name="{{etiqueta.etiqueta}}_x1"  size=4> &#60 x &#8804  <input type="text" name="{{etiqueta.etiqueta}}_x2" size=4> <input type="text" name="{{etiqueta.etiqueta}}_unidad" size=1></div> <br>
 						{% endif %}
 					{% endfor %}	
 					</div>
