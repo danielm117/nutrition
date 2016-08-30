@@ -20,13 +20,13 @@
 		</td>
 		<td>
 			<div id="editar_{{recomendacion.pk}}">
-				<a onclick="editar('{{recomendacion.pk}}')"><img style="width: 40px;"src="http://www.zoanthus.es/imgs/encuesta.png"  class="img-rounded"></a>
+				<a onclick="editar('{{recomendacion.pk}}')"><img style="width: 40px;" src="{% static "image/editar.png" %}" class="img-rounded"></a>
 			</div>
 			<div id="guardar_{{recomendacion.pk}}" style="display: none;">
 				<input style="background-image: url({% static "image/guardar.jpeg" %}); background-repeat: no-repeat; background-size: 100% 100%; color: white; height: 48px; width: 48px; border: hidden;" type="submit" value=" ">
 			</div>
 		</td>
-		<td><a href="http://127.0.0.1:8000/eliminar_recomendacion/?pk={{recomendacion.pk}}"><img style="width: 48px;" src="{% static "image/trash.png" %}" class="img-rounded"></a></td>
+		<td><a href="/eliminar_recomendacion/?pk={{recomendacion.pk}}"><img style="width: 48px;" src="{% static "image/trash.png" %}" class="img-rounded"></a></td>
 	   </tr>
 	</form>	    	    
     {% endfor %}

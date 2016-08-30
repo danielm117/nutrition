@@ -2,9 +2,6 @@
 {% load staticfiles %}
 
 {% block pestana %}
-	<br/>
-	Lista de Nutrientes
-	<br/>
 	<table class="table table-striped table-hover table-condensed" >
   	<tr>
     	<th>Nutrientes</th>
@@ -21,18 +18,18 @@
 			<div class ='{{nutriente.nombre}}Input' style = "display:none;"><input type="text" name="{{nutriente.nombre}}_nombre" value={{nutriente.nombre}} size=15></div>
 		</td>
 		<td>
-			<div class ='{{nutriente.nombre}}'><a href="etiquetas/{{nutriente.nombre}}/" >{{nutriente.kcalxgramo}}</a></div>
+			<div class ='{{nutriente.nombre}}'>{{nutriente.kcalxgramo}}</div>
 			<div class ='{{nutriente.nombre}}Input' style = "display:none;" ><input type="text" name="{{nutriente.nombre}}_kcalxgramo" value={{nutriente.kcalxgramo}} size=15></div>
 		</td>
 		<td>
 			<div id="editar_{{nutriente.nombre}}">
-				<a onclick="editar('{{nutriente.nombre}}')"><img style="width: 40px;"src="http://www.zoanthus.es/imgs/encuesta.png"  class="img-rounded"></a>
+				<a onclick="editar('{{nutriente.nombre}}')"><img style="width: 40px;" src="{% static "image/editar.png" %}"  class="img-rounded"></a>
 			</div>
 			<div id="guardar_{{nutriente.nombre}}" style="display: none;">
 				<input style="background-image: url({% static "image/guardar.jpeg" %}); background-repeat: no-repeat; background-size: 100% 100%; color: white; height: 48px; width: 48px; border: hidden;" type="submit" value=" ">
 			</div>
 		</td>
-		<td><a href="http://127.0.0.1:8000/eliminar_nutriente/?pk={{nutriente.pk}}"><img style="width: 48px;" src="{% static "image/trash.png" %}" class="img-rounded"></a></td>
+		<td><a href="/eliminar_nutriente/?pk={{nutriente.pk}}"><img style="width: 48px;" src="{% static "image/trash.png" %}" class="img-rounded"></a></td>
 	   </tr>
 	</form>	    	    
     {% endfor %}

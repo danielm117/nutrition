@@ -1,6 +1,18 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 {% block content %}
 Bienvenido Daniel
+<div style="float:left; width:100%;">
+	<ul class="nav nav-tabs">
+	    <li id="nutrientes" {% if active == "nutrientes" %} class="active" {% endif %} ><a href="/nutrientes">Nutrientes</a></li>
+	    <li id="etiquetas"  {% if active == "etiquetas" %} class="active" {% endif %}> <a href="/etiquetas">Etiquetas</a></li>
+	    <li id ="reglas"    {% if active == "reglas" %} class="active" {% endif %}><a href="/reglas">Reglas</a> </li>
+	    <li id="alimentos"  {% if active == "alimentos" %} class="active" {% endif %}><a href="/alimentos">Alimentos</a> </li>
+	    <li id="porciones"  {% if active == "porciones" %} class="active" {% endif %}><a href="/porciones">Porciones</a> </li>
+	</ul>
+</div>
+<div style="float:left; width:94%;margin-left:3%;margin-right:3%; margin-top:30px;">
             {% block pestana %}{% endblock %}
+</div>
 
 {% endblock %}

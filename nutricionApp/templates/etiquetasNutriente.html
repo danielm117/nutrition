@@ -2,9 +2,7 @@
 {% load staticfiles %}
 
 {% block pestana %}
-	<br/>
-	Lista de Etiquetas
-	<br>
+
 	<div class = "tabla">
 		<table class="table table-striped table-hover table-condensed" >
 		<tr>
@@ -32,7 +30,7 @@
 						{% if key == etiqueta.etiqueta.nombre %}
 							{% for v in value %} 
 								<div id ='Funcion_{{etiqueta.etiqueta}}_{{v.id}}'><input type="text" name="{{v.id}}_m" value={{v.m|floatformat:4}} size=4 required/>x + (<input type="text" name="{{v.id}}_b" value={{v.b|floatformat:4}} size=4 required/>) ; <input type="text" name="{{v.id}}_x1" value={{v.x1|floatformat:4}} size=4 required/> &#60 x &#8804  <input type="text" name="{{v.id}}_x2" value={{v.x2|floatformat:4}} size=4 required/><input type="text" name="{{v.id}}_unidad" value={{v.unidad_medida}} size=1 required/>  
-								<a href="http://127.0.0.1:8000/eliminar_funcion/?pk={{v.pk}}"><img style="width: 30px;" src="{% static "image/trash.png" %}" class="img-rounded"></a>
+								<a href="/eliminar_funcion/?pk={{v.pk}}"><img style="width: 30px;" src="{% static "image/trash.png" %}" class="img-rounded"></a>
 								</div> <br>
 							{% endfor %}
 								<div id ='Funcion_{{etiqueta.etiqueta}}_0'><input type="text" name="{{etiqueta.etiqueta}}_m" size=4>x + (<input type="text" name="{{etiqueta.etiqueta}}_b" size=4>) ; <input type="text" name="{{etiqueta.etiqueta}}_x1"  size=4> &#60 x &#8804  <input type="text" name="{{etiqueta.etiqueta}}_x2" size=4> <input type="text" name="{{etiqueta.etiqueta}}_unidad" size=1></div> <br>
@@ -48,7 +46,7 @@
 					<input style="background-image: url({% static "image/guardar.jpeg" %}); background-repeat: no-repeat; background-size: 100% 100%; color: white; height: 48px; width: 48px; border: hidden;" type="submit" value=" ">
 					</div>
 				</td>
-				<td><a href="http://127.0.0.1:8000/eliminar_nutriente_etiqueta/?pk={{etiqueta.pk}}"><img style="width: 48px;" src="{% static "image/trash.png" %}" class="img-rounded"></a></td>
+				<td><a href="/eliminar_nutriente_etiqueta/?pk={{etiqueta.pk}}"><img style="width: 48px;" src="{% static "image/trash.png" %}" class="img-rounded"></a></td>
 			</tr>
 		</form>
 		{% endfor %}

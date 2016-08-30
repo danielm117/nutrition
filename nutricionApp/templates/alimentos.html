@@ -2,9 +2,7 @@
 {% load staticfiles %}
 
 {% block pestana %}
-	<br/>
-	Lista de alimentos
-	<br/>
+
 	<table class="table table-striped table-hover table-condensed" >
   	<tr>
     	<th>Alimentos</th>
@@ -22,11 +20,11 @@
 			<div class ='{{alimento.nombre}}Input' style = "display:none;"><input type="text" name="{{alimento.nombre}}_nombre" value="{{alimento.nombre}}" size=15></div>
 		</td>
 		<td>
-			<div class ='{{alimento.nombre}}'><a href="alimento/{{alimento.codigo_fao}}/" >{{alimento.codigo_fao}}</a></div>
+			<div class ='{{alimento.nombre}}'>{{alimento.codigo_fao}}</div>
 			<div class ='{{alimento.nombre}}Input' style = "display:none;" ><input type="text" name="{{alimento.nombre}}_codigo_fao" value="{{alimento.codigo_fao}}" size=15></div>
 		</td>
 		<td>
-			<div class ='{{alimento.nombre}}'><a href="alimento/{{alimento.codigo_fao}}/" >{{alimento.tags}}</a></div>
+			<div class ='{{alimento.nombre}}'>{{alimento.tags}}</div>
 			<div class ='{{alimento.nombre}}Input' style = "display:none;" ><input type="text" name="{{alimento.nombre}}_tags" value="{{alimento.tags}}" size=20></div>
 		</td>
 		<td>
@@ -37,7 +35,7 @@
 				<input style="background-image: url({% static "image/guardar.jpeg" %}); background-repeat: no-repeat; background-size: 100% 100%; color: white; height: 48px; width: 48px; border: hidden;" type="submit" value=" ">
 			</div>
 		</td>
-		<td><a href="http://127.0.0.1:8000/eliminar_alimento/?pk={{alimento.pk}}"><img style="width: 48px;" src="{% static "image/trash.png" %}" class="img-rounded"></a></td>
+		<td><a href="/eliminar_alimento/?pk={{alimento.pk}}"><img style="width: 48px;" src="{% static "image/trash.png" %}" class="img-rounded"></a></td>
 	   </tr>
 	</form>	    	    
     {% endfor %}

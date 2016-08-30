@@ -2,12 +2,6 @@
 {% load staticfiles %}
 
 {% block pestana %}
-	<br>
-	<div>Lista de reglas</div>
-<!-- 	<br>
-	{{reglas}}
-	<br>
-	{{precedentes}} -->
 	<style type="text/css">
 		.regla_body{
 		}
@@ -86,7 +80,7 @@
 					<input style="background-image: url({% static "image/guardar.jpeg" %}); background-repeat: no-repeat; background-size: 100% 100%; color: white; height: 30px; width: 30px; border: hidden;" type="submit" value=" ">
 				</div>
 				<div class="buttons">
-					<a href="eliminar_regla/?pk={{regla.pk}}"><img style="width: 30px;" src="{% static "image/trash.png" %}" class="img-rounded"></a>
+					<a href="/eliminar_regla/?pk={{regla.pk}}"><img style="width: 30px;" src="{% static "image/trash.png" %}" class="img-rounded"></a>
 				</div>
 			</div>
 			<div class="regla_body">

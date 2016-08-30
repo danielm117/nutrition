@@ -33,7 +33,7 @@ def listar_alimentos(request):
         error="No hay Alimentos Registrados" 
         diccionario={'error_message':error}       
     else:
-        diccionario={'alimentos':alimentos}      
+        diccionario={'alimentos':alimentos,'active':'alimentos'}      
 
     template = loader.get_template("alimentos.html")
     context = RequestContext(request,diccionario)
@@ -51,7 +51,7 @@ def listar_porciones(request):
         error="No hay porciones Registrados" 
         diccionario={'error_message':error}       
     else:
-        diccionario={'porciones':porciones,'alimentos':alimentos}      
+        diccionario={'porciones':porciones,'alimentos':alimentos,'active':'porciones'}      
 
     template = loader.get_template("porciones.html")
     context = RequestContext(request,diccionario)
@@ -68,16 +68,17 @@ def listar_nutrientes(request):
         error="No hay nutrientes Registrados" 
         diccionario={'error_message':error}       
     else:
-        diccionario={'nutrientes':nutrientes}      
+        diccionario={'nutrientes':nutrientes,'active':'nutrientes'}      
 
     template = loader.get_template("nutrientes.html")
     context = RequestContext(request,diccionario)
     return HttpResponse({template.render(context)})
 def listar_nutrientesAlimento(request,n):
+    print(n)
     nutrientes_usados = []
     nuevo_nutrientes = []
     try:
-        nutrienteAlimento=Cantidad_Nutriente_Alimento.objects.all()
+        nutrienteAlimento=Cantidad_Nutriente_Alimento.objects.filter(alimento = n)
         todos_nutrientes=Nutriente.objects.all()
     except:
         nutrienteAlimento=None
@@ -93,7 +94,7 @@ def listar_nutrientesAlimento(request,n):
         error="No hay nutrientes Registrados" 
         diccionario={'error_message':error}       
     else:
-        diccionario={'nutrienteAlimento':nutrienteAlimento,'nutrientes_nuevo':nuevo_nutrientes}      
+        diccionario={'nutrienteAlimento':nutrienteAlimento,'nutrientes_nuevo':nuevo_nutrientes,'active':'alimentos'}      
     template = loader.get_template("nutrientesAlimento.html")
     context = RequestContext(request,diccionario)
     return HttpResponse({template.render(context)})
@@ -123,7 +124,7 @@ def listar_etiquetasNutriente(request,n):
         diccionario={'error_message':error,'nueva_etiquetas':nueva_etiquetas}       
     else:
 	    
-        diccionario={'etiquetas':etiquetas_nutriente, 'funciones_lineales':funciones_lineales, 'nueva_etiquetas':nueva_etiquetas}      
+        diccionario={'etiquetas':etiquetas_nutriente, 'funciones_lineales':funciones_lineales, 'nueva_etiquetas':nueva_etiquetas,'active':'nutrientes'}      
 
     template = loader.get_template("etiquetasNutriente.html")
     context = RequestContext(request,diccionario)
@@ -143,7 +144,7 @@ def listar_reglas(request):
         error="No hay etiquetas Registrados" 
         diccionario={'error_message':error}       
     else:
-        diccionario={'reglas':reglas, 'precedentes': precedentes, 'nutrienteEtiqueta':nutrienteEtiqueta, 'recomendaciones':recomendaciones}      
+        diccionario={'reglas':reglas, 'precedentes': precedentes, 'nutrienteEtiqueta':nutrienteEtiqueta, 'recomendaciones':recomendaciones, 'active':'reglas'}      
 
     template = loader.get_template("reglas.html")
     context = RequestContext(request,diccionario)
@@ -160,7 +161,7 @@ def listar_etiquetas(request):
         error="No hay etiquetas Registrados" 
         diccionario={'error_message':error}       
     else:
-        diccionario={'etiquetas':etiquetas}      
+        diccionario={'etiquetas':etiquetas,'active':'etiquetas'}      
 
     template = loader.get_template("etiquetas.html")
     context = RequestContext(request,diccionario)
@@ -268,6 +269,17 @@ def guardar_reglas(request):
             ne = Nutriente_Etiqueta.objects.get(pk=regla_request[n])
             nuevoPrecedente = Precendente_Regla(regla = regla, precendente = ne)
             nuevoPrecedente.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+def guardar_porciones(request):
+    porcionesrequest = request.GET
+    print(porcionesrequest)
+    for e in porcionesrequest.keys():
+        porcion=Gramosporporcion.objects.get(pk=e.split('_',1)[0])
+        if e.split('_',1)[1]=='nombre':
+            porcion.nombre_porcion=porcionesrequest[e]
+        if e.split('_',1)[1]=='valorgramos':
+            porcion.valor_gramos=porcionesrequest[e]
+        porcion.save()    
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 def guardar_nueva_regla(request):
     regla_request = request.GET
