@@ -1,4 +1,5 @@
 {% load staticfiles %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,15 +20,22 @@
         <div class="col-sm-18">
         <nav class="navbar navbar-default" role="navigation">
           <div class="container-fluid">          
-            <div class="navbar-header pull-right">
-              <a class="navbar-brand navbar-btn" href="/">Nombre Usuario</a>
+            <div class="navbar-header pull-left">
+            {% if user.is_authenticated %}
+              <a class="navbar-brand navbar-btn" href="/">Ingeniero de Conocimiento </a>
+            {% endif %}
+
+              <a class="navbar-brand navbar-btn" href="/"></a>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             	<ul class="nav navbar-nav pull-right">
                     <li>
                         <div class="btn-lg navbar-btn">
                         <a class="" href="/">
+							<img style="width: 48px;" src="{% static "image/home.png" %}" class="img-rounded">
+<!--
                         	<span class="glyphicon glyphicon-home"></span>
+-->
                         </a>
                         </div>
                     </li>

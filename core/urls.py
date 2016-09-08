@@ -2,6 +2,11 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 urlpatterns = [
+    url(r'^login/$', 'nutricionApp.views.log_in'),
+    url(r'^login/auth/$', 'nutricionApp.views.auth_view'),
+    url(r'^error_login/$', 'nutricionApp.views.error_login'),
+    url(r'^logout/$', 'nutricionApp.views.log_out'),
+#de aca pa alla ya estaba
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'nutricionApp.views.home'),
     url(r'^alimentos$', 'nutricionApp.views.listar_alimentos'),

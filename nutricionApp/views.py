@@ -4,23 +4,60 @@ from django.shortcuts import render
 import chardet, json
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
+
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.core.context_processors import csrf
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+
 # Create your views here.
 from django.shortcuts import render
 from django.template import loader, Context, RequestContext
 from nutricionApp.models import Alimento, Paciente, Nutriente, Etiqueta, Nutriente_Etiqueta, Funcion_Lineal,Gramosporporcion,Cantidad_Nutriente_Alimento, Medico, Medico_Paciente, Recomendacion, Regla, Precendente_Regla
 from django.http import HttpResponse
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render, render_to_response, redirect
 
 import os,sys
 
 
-# Create your views here.
+def log_in(request):
+    c = {}
+    c.update(csrf(request))
+    return render_to_response('login.html', c)
 
+def log_out(request):
+    logout(request)
+    return render_to_response('logout.html', context_instance=RequestContext(request))
+
+def auth_view(request):
+    email = request.POST.get('email', '')
+    password = request.POST.get('password', '')
+    user = authenticate(username=email,password=password)
+    #return HttpResponse(user)
+    if user is not None:
+        login(request, user)
+        print("se logueo")
+        return redirect('/nutrientes')
+
+        # return render_to_response('home.html', context_instance=RequestContext(request))
+        #return render('hay un usuario')
+    else:
+        print("no se logueo")
+        return redirect('/login')
+        # return render_to_response('error_login.html', context_instance=RequestContext(request))
+        #return render('no hay usuario')
+def error_login(request):
+    return render_to_response('error_login.html', context_instance=RequestContext(request))
+# Create your views here.
+@login_required(login_url='/login/')
 def home(request):
     template = loader.get_template("home.html")
     context = RequestContext(request)
-    return HttpResponse({template.render(context)})
+    return redirect('/nutrientes')
+
+@login_required(login_url='/login/')
 def listar_alimentos(request):
     try:
         alimentos=Alimento.objects.all()
@@ -38,6 +75,7 @@ def listar_alimentos(request):
     template = loader.get_template("alimentos.html")
     context = RequestContext(request,diccionario)
     return HttpResponse({template.render(context)})
+@login_required(login_url='/login/')
 def listar_porciones(request):
     try:
         porciones=Gramosporporcion.objects.all()
@@ -56,6 +94,7 @@ def listar_porciones(request):
     template = loader.get_template("porciones.html")
     context = RequestContext(request,diccionario)
     return HttpResponse({template.render(context)})
+@login_required(login_url='/login/')
 def listar_nutrientes(request):
     try:
         nutrientes=Nutriente.objects.all()
@@ -73,6 +112,7 @@ def listar_nutrientes(request):
     template = loader.get_template("nutrientes.html")
     context = RequestContext(request,diccionario)
     return HttpResponse({template.render(context)})
+@login_required(login_url='/login/')
 def listar_nutrientesAlimento(request,n):
     print(n)
     nutrientes_usados = []
@@ -98,6 +138,7 @@ def listar_nutrientesAlimento(request,n):
     template = loader.get_template("nutrientesAlimento.html")
     context = RequestContext(request,diccionario)
     return HttpResponse({template.render(context)})
+@login_required(login_url='/login/')
 def listar_etiquetasNutriente(request,n):
     todas_etiquetas=Etiqueta.objects.all()
     etiquetas_usadas = []
@@ -129,6 +170,7 @@ def listar_etiquetasNutriente(request,n):
     template = loader.get_template("etiquetasNutriente.html")
     context = RequestContext(request,diccionario)
     return HttpResponse({template.render(context)})
+@login_required(login_url='/login/')
 def listar_reglas(request):
     try:
         reglas=Regla.objects.all()
@@ -149,6 +191,7 @@ def listar_reglas(request):
     template = loader.get_template("reglas.html")
     context = RequestContext(request,diccionario)
     return HttpResponse({template.render(context)})
+@login_required(login_url='/login/')
 def listar_etiquetas(request):
     try:
         etiquetas=Etiqueta.objects.all()
@@ -166,6 +209,7 @@ def listar_etiquetas(request):
     template = loader.get_template("etiquetas.html")
     context = RequestContext(request,diccionario)
     return HttpResponse({template.render(context)})
+@login_required(login_url='/login/')
 def listar_recomendaciones(request):
     try:
         recomendaciones=Recomendacion.objects.all()
@@ -181,6 +225,7 @@ def listar_recomendaciones(request):
     template = loader.get_template("recomendaciones.html")
     context = RequestContext(request,diccionario)
     return HttpResponse({template.render(context)})
+@login_required(login_url='/login/')
 def guardar_funciones(request):
     error = False
     funcionesrequest = request.GET
@@ -222,6 +267,7 @@ def guardar_funciones(request):
     if (not((nueva.x1=="") or (nueva.x2=="") or (nueva.m=="") or (nueva.b=="") or (nueva.unidad_medida==""))):
         nueva.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+@login_required(login_url='/login/')
 def guardar_nutrientes(request):
     error = False
     test2=[]
@@ -242,6 +288,7 @@ def guardar_nutrientes(request):
     for n in nutrientes:
         n.save()    
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+@login_required(login_url='/login/')
 def guardar_reglas(request):
     regla_request = request.GET
     print(regla_request)
@@ -270,6 +317,7 @@ def guardar_reglas(request):
             nuevoPrecedente = Precendente_Regla(regla = regla, precendente = ne)
             nuevoPrecedente.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+@login_required(login_url='/login/')
 def guardar_porciones(request):
     porcionesrequest = request.GET
     print(porcionesrequest)
@@ -281,6 +329,7 @@ def guardar_porciones(request):
             porcion.valor_gramos=porcionesrequest[e]
         porcion.save()    
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+@login_required(login_url='/login/')
 def guardar_nueva_regla(request):
     regla_request = request.GET
     print(regla_request)
@@ -299,6 +348,7 @@ def guardar_nueva_regla(request):
     precedente_nuevo = Precendente_Regla(regla = regla_nueva, precendente = ne)
     precedente_nuevo.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+@login_required(login_url='/login/')
 def guardar_nutrientesAlimento(request):
     nutrienterequest = request.GET
     for n in nutrienterequest.keys():
@@ -311,6 +361,7 @@ def guardar_nutrientesAlimento(request):
     nueva.cantidad_gr = gramos
     nueva.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+@login_required(login_url='/login/')
 def guardar_etiquetas(request):
     error = False
     test2=[]
@@ -329,6 +380,7 @@ def guardar_etiquetas(request):
     for e in etiquetas:
         e.save()    
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+@login_required(login_url='/login/')
 def guardar_recomendaciones(request):
     error = False
     test2=[]
@@ -346,6 +398,7 @@ def guardar_recomendaciones(request):
     for e in etiquetas:
         e.save()    
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+@login_required(login_url='/login/')
 def guardar_alimentos(request):
     error = False
     test2=[]
@@ -368,6 +421,7 @@ def guardar_alimentos(request):
     for a in alimentos:
         a.save()    
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+@login_required(login_url='/login/')
 def guardar_nuevo_etiqueta_nutriente(request):
     etiquetarequest = request.GET
     etiqueta_nueva = etiquetarequest.get('etiqueta')
@@ -377,6 +431,7 @@ def guardar_nuevo_etiqueta_nutriente(request):
     nueva = Nutriente_Etiqueta(etiqueta=e,nutriente=n)
     nueva.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+@login_required(login_url='/login/')
 def guardar_nuevo_nutrientesAlimento(request):
     nutrienterequest = request.GET
     nutriente_nueva = nutrienterequest.get('nombre_nutriente')
@@ -386,6 +441,7 @@ def guardar_nuevo_nutrientesAlimento(request):
     nueva = Cantidad_Nutriente_Alimento(nutriente=n,alimento=a,cantidad_gr =nutrienterequest.get('nombre_cantidad_gr'))
     nueva.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+@login_required(login_url='/login/')
 def guardar_nueva_porcion(request):
     porcionrequest = request.GET
     alimento_nueva = porcionrequest.get('nombre_alimento')
@@ -393,75 +449,88 @@ def guardar_nueva_porcion(request):
     nueva = Gramosporporcion(nombre_porcion=porcionrequest.get('nombre_porcion'),alimento=a,valor_gramos =porcionrequest.get('nombre_valor_gramos'))
     nueva.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+@login_required(login_url='/login/')
 def guardar_nuevo_nutriente(request):
     nutrientesrequest = request.GET
     kcalxgramo=0
     nueva = Nutriente(nombre=nutrientesrequest.get('nombre_nutriente'),kcalxgramo=nutrientesrequest.get('nombre_kcalxgramo'))
     nueva.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+@login_required(login_url='/login/')
 def guardar_nuevo_alimento(request):
     alimentosrequest = request.GET
     nueva = Alimento(nombre=alimentosrequest.get('nombre_alimento'),codigo_fao=alimentosrequest.get('nombre_codigo_fao'),tags=alimentosrequest.get('nombre_tags'))
     nueva.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+@login_required(login_url='/login/')
 def guardar_nueva_etiqueta(request):
     nutrientesrequest = request.GET
     nueva = Etiqueta(nombre=nutrientesrequest.get('nombre_etiqueta'))
     nueva.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+@login_required(login_url='/login/')
 def guardar_nueva_recomendacion(request):
     nutrientesrequest = request.GET
     nueva = Recomendacion(descripcion=nutrientesrequest.get('descripcion_recomendacion'))
     nueva.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+@login_required(login_url='/login/')
 def eliminar_nutriente_etiqueta(request):
     etiquetarequest = request.GET
     pk = etiquetarequest.get('pk');
     nutriente_etiqueta = Nutriente_Etiqueta.objects.filter(pk=pk)[0]
     nutriente_etiqueta.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+@login_required(login_url='/login/')
 def eliminar_regla(request):
     etiquetarequest = request.GET
     pk = etiquetarequest.get('pk');
     nutriente_etiqueta = Regla.objects.filter(pk=pk)[0]
     nutriente_etiqueta.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+@login_required(login_url='/login/')
 def eliminar_nutrientesAlimento(request):
     etiquetarequest = request.GET
     pk = etiquetarequest.get('pk');
     nutriente_etiqueta = Cantidad_Nutriente_Alimento.objects.filter(pk=pk)[0]
     nutriente_etiqueta.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+@login_required(login_url='/login/')
 def eliminar_etiqueta(request):
     etiquetarequest = request.GET
     pk = etiquetarequest.get('pk');
     etiqueta = Etiqueta.objects.filter(pk=pk)[0]
     etiqueta.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+@login_required(login_url='/login/')
 def eliminar_recomendacion(request):
     etiquetarequest = request.GET
     pk = etiquetarequest.get('pk');
     etiqueta = Recomendacion.objects.filter(pk=pk)[0]
     etiqueta.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+@login_required(login_url='/login/')
 def eliminar_nutriente(request):
     etiquetarequest = request.GET
     pk = etiquetarequest.get('pk');
     nutriente = Nutriente.objects.filter(pk=pk)[0]
     nutriente.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+@login_required(login_url='/login/')
 def eliminar_porcion(request):
     etiquetarequest = request.GET
     pk = etiquetarequest.get('pk');
     nutriente = Gramosporporcion.objects.filter(pk=pk)[0]
     nutriente.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+@login_required(login_url='/login/')
 def eliminar_alimento(request):
     etiquetarequest = request.GET
     pk = etiquetarequest.get('pk');
     nutriente = Alimento.objects.filter(pk=pk)[0]
     nutriente.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+@login_required(login_url='/login/')
 def eliminar_funcion(request):
     etiquetarequest = request.GET
     pk = etiquetarequest.get('pk');

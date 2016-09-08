@@ -7,5 +7,4 @@ nutricionApp_nutriente
 nutricionApp_nutriente_etiqueta
 nutricionApp_paciente_alimento_porcion
 nutricionApp_precendente_regla
-nutricionApp_recomendacion
 nutricionApp_regla
