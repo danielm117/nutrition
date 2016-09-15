@@ -3,6 +3,7 @@ nutricionApp_cantidad_nutriente_alimento
 nutricionApp_etiqueta
 nutricionApp_funcion_lineal
 nutricionApp_gramosporporcion
+nutricionApp_ingeniero
 nutricionApp_nutriente
 nutricionApp_nutriente_etiqueta
 nutricionApp_paciente_alimento_porcion

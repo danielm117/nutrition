@@ -117,9 +117,9 @@ def listar_nutrientesAlimento(request,n):
     print(n)
     nutrientes_usados = []
     nuevo_nutrientes = []
+    todos_nutrientes=Nutriente.objects.all()
     try:
         nutrienteAlimento=Cantidad_Nutriente_Alimento.objects.filter(alimento = n)
-        todos_nutrientes=Nutriente.objects.all()
     except:
         nutrienteAlimento=None
         error="No se pudo obtener el listado de nutrientes"
@@ -132,7 +132,7 @@ def listar_nutrientesAlimento(request,n):
             nuevo_nutrientes.append(n)
     if not nutrienteAlimento:
         error="No hay nutrientes Registrados" 
-        diccionario={'error_message':error}       
+        diccionario={'error_message':error,'nutrientes_nuevo':todos_nutrientes}       
     else:
         diccionario={'nutrienteAlimento':nutrienteAlimento,'nutrientes_nuevo':nuevo_nutrientes,'active':'alimentos'}      
     template = loader.get_template("nutrientesAlimento.html")

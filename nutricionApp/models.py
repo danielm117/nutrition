@@ -58,7 +58,7 @@ class Recomendacion(models.Model):
 
 class Gramosporporcion(models.Model):
     nombre_porcion = models.CharField(max_length=254, null=False)
-    valor_gramos = models.DecimalField(max_digits=5, decimal_places=2)
+    valor_gramos = models.DecimalField(max_digits=10, decimal_places=2)
     alimento = models.ForeignKey(Alimento)
     
     def __str__(self):
