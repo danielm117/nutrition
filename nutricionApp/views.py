@@ -628,7 +628,7 @@ def confirmarSolicitudMedico(request,emailMedico,emailPaciente,acepto):
 def crearUsuarioPaciente(request):
     result=False
     try:
-        nuevoPaciente=Paciente(correo=request.GET["email"],nombres=request.GET["nombre"],fecha_nacimiento=request.GET["nacimiento"],peso=request.GET["peso"],estatura_cm=request.GET["estatura"],ejercicio=request.GET["ejercicio"],genero=request.GET["genero"])
+        nuevoPaciente=Paciente(correo=request.GET["email"],nombres=request.GET["nombre"],fecha_nacimiento=request.GET["nacimiento"],peso=request.GET["peso"],estatura_cm=request.GET["estatura"],ejercicio=request.GET["ejercicio"],genero=request.GET["genero"],password=request.GET["pass"])
         nuevoPaciente.save()
         print(nuevoPaciente.correo)
         result=True
